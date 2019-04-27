@@ -9,7 +9,6 @@ from tkinter import messagebox
 class GeoDemonstrator(tkinter.Tk):
   # Konstruktor aplikacije
   def __init__(self):
-    
     # Pozivanje konstruktora roditeljske klase
     super(GeoDemonstrator, self).__init__()
     
