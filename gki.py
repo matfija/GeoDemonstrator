@@ -140,7 +140,7 @@ class GeoDemonstrator(tkinter.Tk):
     self.platno.delete(self.mnogougao)
     
     # Brisanje prethodno nacrtanih tačaka
-    list(map(lambda t: self.platno.delete(t), self.id_tač))
+    list(map(self.platno.delete, self.id_tač))
   
   # Crtanje potrebne figure
   def nacrtaj_figuru(self):
