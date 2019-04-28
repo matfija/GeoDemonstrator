@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Određivanje orijentacije prosleđenje tačke
+# Određivanje položaja prosleđene tačke
 def vekt_proiz(t, u, v):
   a = (t[0]-u[0], t[1]-u[1])
   b = (v[0]-u[0], v[1]-u[1])

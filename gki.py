@@ -21,11 +21,15 @@ class GeoDemonstrator(tkinter.Tk):
     # Inicijalizacija liste tačaka
     self.tačke = []
     
+    # Inicijalizacija figura
+    self.linija = None
+    self.mnogougao = None
+    
     # Inicijalizacija elemenata GKI
-    self.inicijalizacija()
+    self.init_gki()
   
   # Inicijalizacija elemenata GKI
-  def inicijalizacija(self):
+  def init_gki(self):
     # Postavljanje veličine i pozicije prozora
     self.geometry('450x450+75+75')
     
@@ -34,6 +38,17 @@ class GeoDemonstrator(tkinter.Tk):
     # ugrožavaju zamišljeni izgled aplikacije
     self.resizable(False, False)
     
+    # Inicijalizacija glavnog menija
+    self.init_meni()
+    
+    # Inicijalizacija platna
+    self.init_platno()
+    
+    # Kontrola unosa tačaka
+    self.init_unos()
+  
+  # Inicijalizacija glavnog menija
+  def init_meni(self):
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
     meni = tkinter.Menu(self)
@@ -45,7 +60,9 @@ class GeoDemonstrator(tkinter.Tk):
     # onima iz prethodno postavljenog menija
     self.bind('<F1>', self.info)
     self.bind('<Escape>', self.kraj)
-    
+  
+  # Inicijalizacija platna
+  def init_platno(self):
     # Pravljenje okvira za platno
     okvir_p = tkinter.LabelFrame(self, text = 'Zakoračite u svet geometrijskih'
                                        ' transformacija', padx = 10, pady = 10)
@@ -59,9 +76,11 @@ class GeoDemonstrator(tkinter.Tk):
     
     # Vezivanje čuvanja tačke za klik na platno
     self.unos = True
-    self.platno.bind("<Button-1>", lambda e: self.tačke.append((e.x, e.y))
-                                             if self.unos else None)
-    
+    self.platno.bind("<Button-1>", lambda dog: self.dodaj_tačku(dog)
+                                       if self.unos else None)
+  
+  # Kontrola unosa tačaka
+  def init_unos(self):
     # Pravljenje okvira za dugmad
     self.okvir_d = tkinter.LabelFrame(self, text = 'Unosite tačke klikovima'
                                       ' po platnu', padx = 10, pady = 10)
@@ -78,6 +97,12 @@ class GeoDemonstrator(tkinter.Tk):
                                   command = self.ispravi)
     self.dugme_s.place(x = 0, y = 40)
   
+  # Dodavanje pritisnute tačke i usputno iscrtavanje
+  def dodaj_tačku(self, dog):
+    self.tačke.append((dog.x, dog.y))
+    
+    self.nacrtaj_figuru()
+  
   # Promena teksta u zavisnosti od toga
   # da li je unos tačaka u toku ili ne
   def promena_unosa(self):
@@ -85,15 +110,16 @@ class GeoDemonstrator(tkinter.Tk):
       self.okvir_d.config(text = 'Transformišite figuru pomoću dugmadi')
       self.dugme_u.config(text = 'Ponovi unos')
       
-      # Iscrtavanje mnogougla ukoliko su
-      # tačke uspešno učitane tj. neprazne
-      self.mnogougao = self.platno.create_polygon(self.tačke,
-           outline = 'black', fill = '') if self.tačke else None
+      # Crtanje formiranog mnogougla
+      self.unos = not self.unos
+      self.nacrtaj_figuru()
+      self.unos = not self.unos
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
       self.dugme_u.config(text = 'Zaključi unos')
       
       # Brisanje platna i reinicijalizacija liste tačaka
+      self.platno.delete(self.linija)
       self.platno.delete(self.mnogougao)
       self.tačke = []
     
@@ -103,6 +129,24 @@ class GeoDemonstrator(tkinter.Tk):
   # Zamena liste tačaka konveksnim omotom
   def ispravi(self):
     self.tačke = konveksni_omot(self.tačke)
+    
+    # Crtanje ispravljene figure
+    self.nacrtaj_figuru()
+  
+  # Crtanje potrebne figure
+  def nacrtaj_figuru(self):
+    # Brisanje prethodno nacrtane figure
+    self.platno.delete(self.linija)
+    self.platno.delete(self.mnogougao)
+    
+    # Ukoliko je unos u toku, crtanje nove linije
+    if self.unos:
+      self.linija = self.platno.create_line(self.tačke) \
+                    if len(self.tačke) > 1 else None
+    else:
+      # Inače iscrtavanje mnogougla ukoliko su tačke učitane
+      self.mnogougao = self.platno.create_polygon(self.tačke,
+           outline = 'black', fill = '') if self.tačke else None
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni
