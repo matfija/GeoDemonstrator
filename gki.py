@@ -81,14 +81,20 @@ class GeoDemonstrator(tkinter.Tk):
     if self.unos:
       self.okvir_d.config(text = 'Transformišite figuru pomoću dugmadi')
       self.dugme_u.config(text = 'Ponovi unos')
+      
+      # Iscrtavanje mnogougla ukoliko su
+      # tačke uspešno učitane tj. neprazne
       self.mnogougao = self.platno.create_polygon(self.tačke,
            outline = 'black', fill = '') if self.tačke else None
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
       self.dugme_u.config(text = 'Zaključi unos')
+      
+      # Brisanje platna i reinicijalizacija liste tačaka
       self.platno.delete(self.mnogougao)
       self.tačke = []
     
+    # Promena stanja unosa
     self.unos = not self.unos
   
   # Prikazivanje glavnih informacija o aplikaciji;
