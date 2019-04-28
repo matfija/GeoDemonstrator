@@ -81,7 +81,7 @@ class refl(geom):
 # Tačka predstavljena koordinatama
 class tacka:
   def __init__(self, x=0, y=0, w=1):
-    if (isinstance(x,list)):
+    if (isinstance(x, list)):
       self.mat = x
     else:
       self.mat = [x, y, w]

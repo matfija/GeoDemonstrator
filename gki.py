@@ -20,6 +20,7 @@ class GeoDemonstrator(tkinter.Tk):
     
     # Inicijalizacija liste tačaka
     self.tačke = []
+    self.id_tač = []
     
     # Inicijalizacija figura
     self.linija = None
@@ -110,7 +111,7 @@ class GeoDemonstrator(tkinter.Tk):
       self.okvir_d.config(text = 'Transformišite figuru pomoću dugmadi')
       self.dugme_u.config(text = 'Ponovi unos')
       
-      # Crtanje formiranog mnogougla
+      # Promena stanja unosa i crtanje formiranog mnogougla
       self.unos = False
       self.nacrtaj_figuru()
     else:
@@ -118,9 +119,9 @@ class GeoDemonstrator(tkinter.Tk):
       self.dugme_u.config(text = 'Zaključi unos')
       
       # Brisanje platna i reinicijalizacija liste tačaka
-      self.platno.delete(self.linija)
-      self.platno.delete(self.mnogougao)
+      self.obriši_platno()
       self.tačke = []
+      self.id_tač = []
     
       # Promena stanja unosa
       self.unos = True
@@ -132,16 +133,29 @@ class GeoDemonstrator(tkinter.Tk):
     # Crtanje ispravljene figure
     self.nacrtaj_figuru()
   
-  # Crtanje potrebne figure
-  def nacrtaj_figuru(self):
+  # Brisanje platna
+  def obriši_platno(self):
     # Brisanje prethodno nacrtane figure
     self.platno.delete(self.linija)
     self.platno.delete(self.mnogougao)
     
+    # Brisanje prethodno nacrtanih tačaka
+    list(map(lambda t: self.platno.delete(t), self.id_tač))
+  
+  # Crtanje potrebne figure
+  def nacrtaj_figuru(self):
+    # Brisanje platna
+    self.obriši_platno()
+    
+    # Iscrtavanje trenutnih tačaka
+    self.id_tač = list(map(lambda t: self.platno.create_oval
+                       (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
+                  outline = 'blue', fill = 'blue'), self.tačke))
+    
     # Ukoliko je unos u toku, crtanje nove linije
     if self.unos:
       self.linija = self.platno.create_line(self.tačke) \
-                    if len(self.tačke) > 1 else None
+                     if len(self.tačke) > 1 else None
     else:
       # Inače iscrtavanje mnogougla ukoliko su tačke učitane
       self.mnogougao = self.platno.create_polygon(self.tačke,

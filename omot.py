@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Uključivanje modula sa operatorima
+from operator import itemgetter
+
 # Određivanje položaja prosleđene tačke
 def vekt_proiz(t, u, v):
   a = (t[0]-u[0], t[1]-u[1])
@@ -10,7 +13,8 @@ def vekt_proiz(t, u, v):
 
 # Vraćanje tačaka sa leve strane vektora
 def podela(u, v, tačke):
-    return [t for t in tačke if vekt_proiz(t, u, v) < 0]
+    # return [t for t in tačke if vekt_proiz(t, u, v) < 0]
+    return list(filter(lambda t: vekt_proiz(t, u, v) < 0, tačke))
 
 # Proširivanje pretrage omotnih tačaka
 def proširi(u, v, tačke):
@@ -27,9 +31,13 @@ def proširi(u, v, tačke):
 
 # Brzi algoritam za pronalazak konveksnog omotača
 def konveksni_omot(tačke):
+    # Prazna lista tačaka nema konveksni omot
+    if not tačke:
+        return []
+    
     # Nalaženje dve tačke omota
-    u = min(tačke, key = lambda t: t[0])
-    v = max(tačke, key = lambda t: t[0])
+    u = min(tačke, key = itemgetter(0))
+    v = max(tačke, key = itemgetter(0))
     
     # Podela pretrage na levu i desnu stranu
     levo, desno = podela(u, v, tačke), podela(v, u, tačke)
