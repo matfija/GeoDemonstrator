@@ -96,7 +96,7 @@ def test():
   print('Unosite linije koda do kraja ulaza.\n'
         'Podržano: dodela, kompozicija, štampanje.\n'
         'Transformacije: translacija, skaliranje,\n'
-        'smicanje, rotacija, refleksija.')
+        'smicanje, rotacija, refleksija.\n')
   
   # Mali interpretator koji se oslanja
   # na pozivanje Pajtonovog interpretera
@@ -107,7 +107,7 @@ def test():
     except EOFError:
       print('Kraj ulaza.')
       break
-    except Exception:
+    except:
       print('Pokusajte ponovo.')
 
 if __name__ == '__main__':

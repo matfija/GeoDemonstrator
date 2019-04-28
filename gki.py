@@ -1,6 +1,9 @@
 # Uključivanje sistemskog i grafičkog modula
 import sys, tkinter
 
+# Uključivanje modula za nalazak konveksnog omotača
+from omot import konveksni_omot
+
 # Uključivanje pomoćnog modula za kutijice sa porukama
 from tkinter import messagebox
 
@@ -70,9 +73,9 @@ class GeoDemonstrator(tkinter.Tk):
                                   command = self.promena_unosa)
     self.dugme_u.place(x = 0, y = 0)
     
-    # Postavljanje dugmeta za sortiranje tačaka
+    # Postavljanje dugmeta za konveksni omotač
     self.dugme_s = tkinter.Button(self.okvir_d, text = 'Ispravi figuru',
-                                  command = lambda: self.tačke.sort())
+                                  command = self.ispravi)
     self.dugme_s.place(x = 0, y = 40)
   
   # Promena teksta u zavisnosti od toga
@@ -96,6 +99,10 @@ class GeoDemonstrator(tkinter.Tk):
     
     # Promena stanja unosa
     self.unos = not self.unos
+  
+  # Zamena liste tačaka konveksnim omotom
+  def ispravi(self):
+    self.tačke = konveksni_omot(self.tačke)
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni
