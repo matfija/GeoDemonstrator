@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Ukljucivanje matematickog modula
+# Uključivanje matematickog modula
 from math import sin, cos, radians
 
 # Geometrijska transformacija ravni
@@ -10,8 +10,8 @@ class geom:
   def __init__(self, mat):
     self.mat = mat
   
-  # Uobicajeno mnozenje matrica ili, pak,
-  # mnozenje matrice sa tackom prostora
+  # Uobičajeno množenje matrica ili, pak,
+  # množenje matrice sa tačkom prostora
   def __mul__(self, dr):
     if isinstance(dr, geom):
       pom = [[0 for i in range(3)] for j in range(3)]
@@ -24,40 +24,41 @@ class geom:
       return geom(pom)
     else:
       pom = [0 for i in range(3)] 
+      
       for i in range(3):
         for j in range(3):
           pom[i] += self.mat[i][j] * dr.mat[j]
       
       return tacka(pom)
   
-  # Uobicajena string predstava matrice
+  # Uobičajena string predstava matrice
   def __str__(self):
     return str(self.mat[0]) + '\n' \
          + str(self.mat[1]) + '\n' \
          + str(self.mat[2])
 
-# Translacija nasledjuje geom. trans.
+# Translacija nasleđuje geom. trans.
 class trans(geom):
   def __init__(self, x=0, y=0):
     self.mat = [[1, 0, x],
                 [0, 1, y],
                 [0, 0, 1]]
 
-# Skaliranje nasledjuje geom. trans.
+# Skaliranje nasleđuje geom. trans.
 class skal(geom):
   def __init__(self, x=1, y=1):
     self.mat = [[x, 0, 0],
                 [0, y, 0],
                 [0, 0, 1]]
 
-# Smicanje nasledjuje geom. trans.
+# Smicanje nasleđuje geom. trans.
 class smic(geom):
   def __init__(self, x=0, y=0):
     self.mat = [[1, x, 0],
                 [y, 1, 0],
                 [0, 0, 1]]
 
-# Rotacija nasledjuje geom. trans.
+# Rotacija nasleđuje geom. trans.
 class rot(geom):
   def __init__(self, u=0):
     pom1 = cos(radians(u))
@@ -67,7 +68,7 @@ class rot(geom):
                 [pom2,  pom1,  0],
                 [0,      0,    1]]
 
-# Refleksija nasledjuje geom. trans.
+# Refleksija nasleđuje geom. trans.
 class refl(geom):
   def __init__(self, u=0):
     pom1 = cos(radians(u))
@@ -77,7 +78,7 @@ class refl(geom):
                 [pom2, -pom1,  0],
                 [0,      0,    1]]
 
-# Tacka predstavljena koordinatama
+# Tačka predstavljena koordinatama
 class tacka:
   def __init__(self, x=0, y=0, w=1):
     if (isinstance(x,list)):
@@ -85,15 +86,15 @@ class tacka:
     else:
       self.mat = [x, y, w]
   
-  # Uobicajena string predstava tacke
+  # Uobičajena string predstava tačke
   def __str__(self):
     return str(self.mat)
 
 # Fja za testiranje implementiranih klasa;
-# predlaze se pokretanje sa < test.txt
+# predlaže se pokretanje sa < test.txt
 def test():
   print('Unosite linije koda do kraja ulaza.\n'
-        'Podrzano: dodela, kompozicija, stampanje.\n'
+        'Podržano: dodela, kompozicija, štampanje.\n'
         'Transformacije: translacija, skaliranje,\n'
         'smicanje, rotacija, refleksija.')
   

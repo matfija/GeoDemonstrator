@@ -1,11 +1,11 @@
-# Ukljucivanje sistemskog i grafickog modula
+# Uključivanje sistemskog i grafičkog modula
 import sys, tkinter
 
-# Ukljucivanje pomocnog modula za kutijice sa porukama
+# Uključivanje pomoćnog modula za kutijice sa porukama
 from tkinter import messagebox
 
 # Nosilac programa je klasa GeoDemonstrator, koja
-# nasledjuje graficku klasu Tk iz modula tkinter
+# nasleđuje grafičku klasu Tk iz modula tkinter
 class GeoDemonstrator(tkinter.Tk):
   # Konstruktor aplikacije
   def __init__(self):
@@ -20,16 +20,16 @@ class GeoDemonstrator(tkinter.Tk):
   
   # Inicijalizacija elemenata GKI
   def inicijalizacija(self):
-    # Postavljanje velicine i pozicije prozora
+    # Postavljanje veličine i pozicije prozora
     self.geometry('450x450+75+75')
     
-    # Onemogucavanje promene velicine prozora,
-    # posto je Tk prilicno plastican, pa promene
-    # ugrozavaju zamisljeni izgled aplikacije
+    # Onemogućavanje promene veličine prozora,
+    # pošto je Tk prilično plastičan, pa promene
+    # ugrožavaju zamišljeni izgled aplikacije
     self.resizable(False, False)
     
     # Postavljanje glavnog menija i vezivanje
-    # komandi za odgovarajuce funkcionalnosti
+    # komandi za odgovarajuće funkcionalnosti
     meni = tkinter.Menu(self)
     meni.add_command(label = 'Info (F1)', command = self.info)
     meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
@@ -42,8 +42,8 @@ class GeoDemonstrator(tkinter.Tk):
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni
-  # podaci o dogadjaju tastature, slicno kao sto fje
-  # dogadjaja u GLUT-u obavezno primaju koordinate
+  # podaci o događaju tastature, slično kao što fje
+  # događaja u GLUT-u obavezno primaju koordinate
   def info(self, *args):
     messagebox.showinfo('Informacije',
                'GeoDemonstrator, seminarski iz Programskih paradigmi.\n\n'
