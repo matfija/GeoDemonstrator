@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# Uključivanje matematickog modula
+# Uključivanje matematičkog modula
 from math import sin, cos, radians
 
 # Geometrijska transformacija ravni
@@ -112,4 +112,3 @@ def test():
 
 if __name__ == '__main__':
   test()
-

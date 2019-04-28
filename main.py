@@ -16,4 +16,3 @@ def main():
 # pokrenut, a ne npr. samo importovan
 if __name__ == '__main__':
   main()
-
