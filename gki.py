@@ -111,9 +111,8 @@ class GeoDemonstrator(tkinter.Tk):
       self.dugme_u.config(text = 'Ponovi unos')
       
       # Crtanje formiranog mnogougla
-      self.unos = not self.unos
+      self.unos = False
       self.nacrtaj_figuru()
-      self.unos = not self.unos
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
       self.dugme_u.config(text = 'Zaključi unos')
@@ -123,8 +122,8 @@ class GeoDemonstrator(tkinter.Tk):
       self.platno.delete(self.mnogougao)
       self.tačke = []
     
-    # Promena stanja unosa
-    self.unos = not self.unos
+      # Promena stanja unosa
+      self.unos = True
   
   # Zamena liste tačaka konveksnim omotom
   def ispravi(self):
