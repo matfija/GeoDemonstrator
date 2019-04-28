@@ -1,0 +1,18 @@
+t1 = trans(1,5)
+t2 = skal(1,7)
+t3 = refl(90)
+t4 = rot(90)
+t5 = smic(2)
+
+k1 = tacka()
+k2 = tacka(1,1)
+
+#print(t1*k1)
+#print(t2*k2)
+#print(t3*k2)
+#print(t4*k1)
+#print(t5*k2)
+
+#print(t1,t3,t5,sep='\n\n')
+print(t1*t2*t3*t4*t5)
+
