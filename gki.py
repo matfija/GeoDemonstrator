@@ -149,9 +149,9 @@ class GeoDemonstrator(tk.Tk):
     
     # Iscrtavanje trenutnih tačaka
     self.id_tač = [self.platno.create_oval
-               (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
-               outline = 'blue', fill = 'blue')
-                     for t in self.tačke]
+              (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
+              outline = 'blue', fill = 'blue')
+                    for t in self.tačke]
     
     # Ukoliko je unos u toku, crtanje nove linije
     if self.unos:
