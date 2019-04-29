@@ -108,7 +108,7 @@ def test():
       print('Kraj ulaza.')
       break
     except:
-      print('Pokusajte ponovo.')
+      print('Pokušajte ponovo.')
 
 if __name__ == '__main__':
   test()

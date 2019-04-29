@@ -1,16 +1,16 @@
 #### KriLa
 
 ## GeoDemonstrator :loop:
-Seminarski rad na kursu Programske paradigme. Zamisao je da korisnik zada mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
+Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
 
-Ukratko, skelet projekta bi bio GKI sa koordinatnim sistemom, poljima za unos parametara transformacija i dugmadima koja ih izvršavaju. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
+Ukratko, skelet projekta je GKI sa platkom koje predstavlja koordinatni sistem, poljima za unos parametara transformacija i dugmadima koja ih izvršavaju. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
 
 ## Podešavanje :memo:
-Program je napisan u jeziku Python3, uz korišćenje njegovih skript, objektno-orijentisanih i funkcionalnih koncepata, kao i prikladnih pomoćnih biblioteka.
+Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje njegovih skript, objektno-orijentisanih i funkcionalnih koncepata, kao i prikladnih pomoćnih biblioteka.
 
-GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https://docs.python.org/3/library/tkinter.html) – koji se može podesiti komandom poput `sudo apt-get install python3-tk` za Ubuntu.
+GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https://docs.python.org/3/library/tkinter.html) – koji se može podesiti komandom poput `sudo apt-get install python3-tk` za Ubuntu za starije verzije, dok je za novije automatski podešen.
 
-Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) ili nekog drugog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
+Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
 
 ## Članovi tima :computer:
 * [Kristina Pantelić](https://github.com/beskonacnost), 91/2016

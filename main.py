@@ -5,7 +5,7 @@ import gki
 
 # Glavna (main) fja
 def main():
-  # Instanciranje stožerne klase
+  # Instanciranje objekta stožerne klase
   aplikacija = gki.GeoDemonstrator()
   
   # Pokretanje glavne petlje programa
