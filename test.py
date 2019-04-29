@@ -3,18 +3,25 @@
 # Uključivanje modula za geometriju
 from geom import *
 
-# Definisanje potrebnih transformacija
+# Definisanje potrebnih transformacija:
+# prvo se koordinatni početak translira
+# u centar platna, zatim se orijentacija
+# y-ose obrne, i na kraju se, radi smanjenja
+# gustine piksela, koord. sistem skalira;
+# pri ovoj skali platno je dimenzija 60x40,
+# te za svaku tačku važi -30<x<30, -20<y<20
 t1 = trans(-204, -132)
-t2 = refl(90)
+t2 = refl() # refl(0)
 t3 = skal(1/7, 1/7)
 
 # Matrica prelaza sa platna na koord. sistem
 plat_u_koord = t3 * t2 * t1
 print(plat_u_koord, end = '\n\n')
 
-# Definisanje inverznih transformacija
+# Definisanje inverznih transformacija: primena
+# obrnutih transformacija obrnutim redosledom
 t1 = trans(204, 132)
-t2 = refl(90)
+t2 = refl() # refl(0)
 t3 = skal(7, 7)
 
 # Matrica prelaza sa koord. sistema na platno
