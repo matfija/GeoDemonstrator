@@ -20,11 +20,13 @@ class GeoDemonstrator(tk.Tk):
     
     # Inicijalizacija liste tačaka
     self.tačke = []
+    
+    # Inicijalizacija liste identifikatora
+    # na platnu trenutno iscrtanih tačaka
     self.id_tač = []
     
-    # Inicijalizacija figura
-    self.linija = None
-    self.mnogougao = None
+    # Inicijalizacija figure
+    self.figura = None
     
     # Inicijalizacija elemenata GKI
     self.init_gki()
@@ -136,8 +138,7 @@ class GeoDemonstrator(tk.Tk):
   # Brisanje platna
   def obriši_platno(self):
     # Brisanje prethodno nacrtane figure
-    self.platno.delete(self.linija)
-    self.platno.delete(self.mnogougao)
+    self.platno.delete(self.figura)
     
     # Brisanje prethodno nacrtanih tačaka
     list(map(self.platno.delete, self.id_tač))
@@ -147,7 +148,8 @@ class GeoDemonstrator(tk.Tk):
     # Brisanje platna
     self.obriši_platno()
     
-    # Iscrtavanje trenutnih tačaka
+    # Iscrtavanje trenutnih tačaka i
+    # čuvanje njihovih identifikatora
     self.id_tač = [self.platno.create_oval
               (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
               outline = 'blue', fill = 'blue')
@@ -155,12 +157,12 @@ class GeoDemonstrator(tk.Tk):
     
     # Ukoliko je unos u toku, crtanje nove linije
     if self.unos:
-      self.linija = self.platno.create_line(self.tačke) \
+      self.figura = self.platno.create_line(self.tačke) \
                      if len(self.tačke) > 1 else None
     else:
       # Inače iscrtavanje mnogougla ukoliko su tačke učitane
-      self.mnogougao = self.platno.create_polygon(self.tačke,
-       outline = 'black', fill = '') if self.tačke else None
+      self.figura = self.platno.create_polygon(self.tačke,
+      outline = 'black', fill = '') if self.tačke else None
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni
