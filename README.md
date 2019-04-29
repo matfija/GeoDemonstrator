@@ -1,4 +1,5 @@
 #### KriLa
+<img width="700" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/20190429.png">
 
 ## GeoDemonstrator :loop:
 Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
