@@ -168,17 +168,17 @@ class GeoDemonstrator(tkinter.Tk):
   def info(self, *args):
     messagebox.showinfo('Informacije',
                'GeoDemonstrator, seminarski iz Programskih paradigmi.\n\n'
-               'Zamisao je da korisnik zada mnogougao u dvodimenzionom'
-               ' okruženju, nad kojim zatim vrši proizvoljne afine geometrijske'
-               ' tranformacije: translaciju, rotaciju, refleksiju, skaliranje,'
-               ' smicanje.\n\n'
+               'Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad'
+               ' kojim zatim vrši proizvoljne afine geometrijske'
+               ' tranformacije: translaciju, rotaciju, refleksiju,'
+               ' skaliranje, smicanje.\n\n'
                'Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše'
                ' razumevanje materije koja se obrađuje na časovima Geometrije'
                ' za I smer, kao i Računarske grafike.\n\n'
                'Autori (tim KriLa):\n'
                'Kristina Pantelić, 91/2016,\n'
                'Lazar Vasović, 99/2016.\n\n'
-               'Matematički fakultet, 2019.')
+               'Matematički fakultet, 2019')
   
   # Zatvaranje aplikacije na zahtev korisnika
   def kraj(self, *args):
