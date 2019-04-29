@@ -73,10 +73,15 @@ class GeoDemonstrator(tk.Tk):
                   height = 300, width = 430)
     
     # Postavljanje platna unutar okvira
-    self.platno = tk.Canvas(okvir_p, bg = 'grey',
-                            height = 260, width = 405)
+    self.platno = tk.Canvas(okvir_p, height = 261, width = 405)
     self.platno.place(x = 0, y = 0)
     
+    # Postavljanje koordinatnog sistema na platno;
+    # slika nije lokalna promenljiva, pošto bi je u
+    # tom slučaju "pojeo" sakupljač otpadaka
+    self.slika = tk.PhotoImage(file = 'koord.gif')
+    self.platno.create_image(203, 131, image = self.slika)
+
     # Vezivanje čuvanja tačke za klik na platno
     self.unos = True
     self.platno.bind("<Button-1>", self.dodaj_tačku)
@@ -186,4 +191,7 @@ class GeoDemonstrator(tk.Tk):
   # Zatvaranje aplikacije na zahtev korisnika
   def kraj(self, *args):
     print('GeoDemonstrator zatvoren na zahtev korisnika!')
-    self.quit()
+    
+    # Upotreba self.quit() zamrzava prozor na Windows-u,
+    # pošto prekida izvršavanje i pokretačkog programa
+    self.destroy()

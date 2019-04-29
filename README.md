@@ -1,5 +1,5 @@
 #### KriLa
-<img width="700" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/20190429.png">
+<img width="700" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/2019_04_29.png">
 
 ## GeoDemonstrator :loop:
 Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
@@ -13,7 +13,7 @@ GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https
 
 Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
 
-Program korektno radi i na operativnom sistemu Windows; testiran je na Win10.
+Program korektno radi i na operativnom sistemu Windows; testiran je na Win10 preko alata IDLE.
 
 ## Članovi tima :computer:
 * [Kristina Pantelić](https://github.com/beskonacnost), 91/2016

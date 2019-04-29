@@ -33,9 +33,11 @@ class geom:
   
   # Uobičajena string predstava matrice
   def __str__(self):
-    return str(self.mat[0]) + '\n' \
-         + str(self.mat[1]) + '\n' \
-         + str(self.mat[2])
+    return 'Transformacija:\n[%.2f, %.2f, %.2f,\n' \
+           ' %.2f, %.2f, %.2f,\n %.2f, %.2f, %.2f]' \
+           % (self.mat[0][0], self.mat[0][1], self.mat[0][2],
+              self.mat[1][0], self.mat[1][1], self.mat[1][2],
+              self.mat[2][0], self.mat[2][1], self.mat[2][2])
 
 # Translacija nasleđuje geom. trans.
 class trans(geom):
@@ -88,10 +90,11 @@ class tacka:
   
   # Uobičajena string predstava tačke
   def __str__(self):
-    return str(self.mat)
+    return 'Tačka:\n(%.2f, %.2f)' % (self.mat[0], self.mat[1])
 
 # Fja za testiranje implementiranih klasa;
-# predlaže se pokretanje sa < test.txt
+# predlaže se pokretanje sa < test.py, gde
+# se nalaze transformacije bitne za rad
 def test():
   print('Unosite linije koda do kraja ulaza.\n'
         'Podržano: dodela, kompozicija, štampanje.\n'
@@ -99,7 +102,8 @@ def test():
         'smicanje, rotacija, refleksija.\n')
   
   # Mali interpretator koji se oslanja
-  # na pozivanje Pajtonovog interpretera
+  # na pozivanje Pajtonovog interpretera;
+  # u pitanju je poznata RE(P)L petlja
   while True:
     try:
       linija = input()
