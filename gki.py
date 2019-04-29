@@ -1,5 +1,5 @@
 # Uključivanje sistemskog i grafičkog modula
-import sys, tkinter
+import sys, tkinter as tk
 
 # Uključivanje modula za nalazak konveksnog omotača
 from omot import konveksni_omot
@@ -9,7 +9,7 @@ from tkinter import messagebox
 
 # Nosilac programa je klasa GeoDemonstrator, koja
 # nasleđuje grafičku klasu Tk iz modula tkinter
-class GeoDemonstrator(tkinter.Tk):
+class GeoDemonstrator(tk.Tk):
   # Konstruktor aplikacije
   def __init__(self):
     # Pozivanje konstruktora roditeljske klase
@@ -52,7 +52,7 @@ class GeoDemonstrator(tkinter.Tk):
   def init_meni(self):
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
-    meni = tkinter.Menu(self)
+    meni = tk.Menu(self)
     meni.add_command(label = 'Info (F1)', command = self.info)
     meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
     self.config(menu = meni)
@@ -65,44 +65,44 @@ class GeoDemonstrator(tkinter.Tk):
   # Inicijalizacija platna
   def init_platno(self):
     # Pravljenje okvira za platno
-    okvir_p = tkinter.LabelFrame(self, text = 'Zakoračite u svet geometrijskih'
-                                       ' transformacija', padx = 10, pady = 10)
+    okvir_p = tk.LabelFrame(self, text = 'Zakoračite u svet geometrijskih'
+                               ' transformacija', padx = 10, pady = 10)
     okvir_p.place(x = 10, y = 10,
                   height = 300, width = 430)
     
     # Postavljanje platna unutar okvira
-    self.platno = tkinter.Canvas(okvir_p, bg = 'grey',
-                                 height = 260, width = 405)
+    self.platno = tk.Canvas(okvir_p, bg = 'grey',
+                            height = 260, width = 405)
     self.platno.place(x = 0, y = 0)
     
     # Vezivanje čuvanja tačke za klik na platno
     self.unos = True
-    self.platno.bind("<Button-1>", lambda dog: self.dodaj_tačku(dog)
-                                       if self.unos else None)
+    self.platno.bind("<Button-1>", self.dodaj_tačku)
   
   # Kontrola unosa tačaka
   def init_unos(self):
     # Pravljenje okvira za dugmad
-    self.okvir_d = tkinter.LabelFrame(self, text = 'Unosite tačke klikovima'
-                                      ' po platnu', padx = 10, pady = 10)
+    self.okvir_d = tk.LabelFrame(self, text = 'Unosite tačke klikovima'
+                                  ' po platnu', padx = 10, pady = 10)
     self.okvir_d.place(x = 10, y = 315,
                        height = 120, width = 430)
     
     # Postavljanje dugmeta za kontrolu unosa
-    self.dugme_u = tkinter.Button(self.okvir_d, text = 'Zaključi unos',
-                                  command = self.promena_unosa)
+    self.dugme_u = tk.Button(self.okvir_d, text = 'Zaključi unos',
+                                 command = self.promena_unosa)
     self.dugme_u.place(x = 0, y = 0)
     
     # Postavljanje dugmeta za konveksni omotač
-    self.dugme_s = tkinter.Button(self.okvir_d, text = 'Ispravi figuru',
-                                  command = self.ispravi)
+    self.dugme_s = tk.Button(self.okvir_d, text = 'Ispravi figuru',
+                                   command = self.ispravi)
     self.dugme_s.place(x = 0, y = 40)
   
-  # Dodavanje pritisnute tačke i usputno iscrtavanje
+  # Dodavanje pritisnute tačke i iscrtavanje,
+  # ali samo ukoliko je u toku unos tačaka
   def dodaj_tačku(self, dog):
-    self.tačke.append((dog.x, dog.y))
-    
-    self.nacrtaj_figuru()
+    if self.unos:
+      self.tačke.append((dog.x, dog.y))
+      self.nacrtaj_figuru()
   
   # Promena teksta u zavisnosti od toga
   # da li je unos tačaka u toku ili ne
@@ -148,9 +148,10 @@ class GeoDemonstrator(tkinter.Tk):
     self.obriši_platno()
     
     # Iscrtavanje trenutnih tačaka
-    self.id_tač = list(map(lambda t: self.platno.create_oval
-                       (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
-                  outline = 'blue', fill = 'blue'), self.tačke))
+    self.id_tač = [self.platno.create_oval
+               (t[0]-2, t[1]-2, t[0]+2, t[1]+2,
+               outline = 'blue', fill = 'blue')
+                     for t in self.tačke]
     
     # Ukoliko je unos u toku, crtanje nove linije
     if self.unos:
@@ -159,7 +160,7 @@ class GeoDemonstrator(tkinter.Tk):
     else:
       # Inače iscrtavanje mnogougla ukoliko su tačke učitane
       self.mnogougao = self.platno.create_polygon(self.tačke,
-           outline = 'black', fill = '') if self.tačke else None
+       outline = 'black', fill = '') if self.tačke else None
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni

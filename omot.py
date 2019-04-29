@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
+# Uključivanje funkcionalnog modula
+from functools import partial
+
 # Uključivanje modula sa operatorima
-from operator import itemgetter
+from operator import gt, itemgetter
 
 # Određivanje položaja prosleđene tačke
 def vekt_proiz(t, u, v):
@@ -13,8 +16,9 @@ def vekt_proiz(t, u, v):
 
 # Vraćanje tačaka sa leve strane vektora
 def podela(u, v, tačke):
-    # return [t for t in tačke if vekt_proiz(t, u, v) < 0]
-    return list(filter(lambda t: vekt_proiz(t, u, v) < 0, tačke))
+    # lambda t: partial(gt, 0)(partial(vekt_proiz, u=u, v=v)(t))
+    # return list(filter(lambda t: vekt_proiz(t, u, v) < 0, tačke))
+    return [t for t in tačke if vekt_proiz(t, u, v) < 0]
 
 # Proširivanje pretrage omotnih tačaka
 def proširi(u, v, tačke):
@@ -23,7 +27,7 @@ def proširi(u, v, tačke):
         return []
 
     # Nalaženje najudaljenije tačke
-    w = min(tačke, key = lambda t: vekt_proiz(t, u, v))
+    w = min(tačke, key = partial(vekt_proiz, u=u, v=v))
     
     # Podela pretrage po određenoj tački
     t1, t2 = podela(w, v, tačke), podela(u, w, tačke)
