@@ -8,11 +8,13 @@ Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, 
 
 ## Tehnički detalji :robot:
 Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje osobina raznih paradigmi koje su u osnovi ovog jezika ili čiji se koncepti provlače kroz njega:
+* imperativna/proceduralna paradigma: promenljive, funkcije...,
 * skript paradigma: exec, eval, obrada pozivanja čak i sintaksno neispravnih naredbi...,
 * objektno-orijentisana paradigma: klase, nasleđivanje, polimorfizam, preopterećivanje operatora...,
 * funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, apstrakcija listi...,
 * komponentna paradigma: grafički korisnički interfejs, više nezavisnih modula koji predstavljaju ugovorene interfejse,
-* paralelna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano).
+* konkurentna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano),
+* programiranje vođeno događajima: GKI, koncept glavnje petlje, osluškivanje i obrada događaja.
 
 Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: threading, operator, time...
 
