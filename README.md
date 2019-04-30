@@ -6,11 +6,19 @@ Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodim
 
 Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, poljima za unos parametara transformacija i dugmadima koja ih izvršavaju. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
 
-## Podešavanje :memo:
-Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje njegovih skript, objektno-orijentisanih, funkcionalnih i komponentnih koncepata, kao i prikladnih pomoćnih biblioteka.
+## Tehnički detalji :robot:
+Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje osobina raznih paradigmi koje su u osnovi ovog jezika ili čiji se koncepti provlače kroz njega:
+* skript paradigma: exec, eval, obrada pozivanja čak i sintaksno neispravnih naredbi...,
+* objektno-orijentisana paradigma: klase, nasleđivanje, polimorfizam, preopterećivanje operatora...,
+* funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, apstrakcija listi...,
+* komponentna paradigma: grafički korisnički interfejs, više nezavisnih modula koji predstavljaju ugovorene interfejse,
+* paralelna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano).
+
+Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: threading, operator, time...
 
 GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https://docs.python.org/3/library/tkinter.html) – koji se može podesiti komandom poput `sudo apt-get install python3-tk` za Ubuntu za starije verzije, dok je za novije automatski podešen.
 
+## Podešavanje :memo:
 Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
 
 Program korektno radi i na operativnom sistemu Windows; testiran je na Win10 preko alata [IDLE](https://www.python.org/downloads/release/python-323/).

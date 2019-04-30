@@ -12,6 +12,9 @@ from tkinter import messagebox
 class GeoDemonstrator(tk.Tk):
   # Konstruktor aplikacije
   def __init__(self):
+    # Poruka pozdrava za one koji vole konzolu
+    print('Dobro došli u aplikaciju GeoDemonstrator!')
+    
     # Pozivanje konstruktora roditeljske klase
     super(GeoDemonstrator, self).__init__()
     
@@ -190,6 +193,7 @@ class GeoDemonstrator(tk.Tk):
   
   # Zatvaranje aplikacije na zahtev korisnika
   def kraj(self, *args):
+    # Poruka otpozdrava za one koji vole konzolu
     print('GeoDemonstrator zatvoren na zahtev korisnika!')
     
     # Upotreba self.quit() zamrzava prozor na Windows-u,

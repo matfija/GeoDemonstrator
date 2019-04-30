@@ -1,10 +1,45 @@
 #!/usr/bin/env python3
 
+# Uključivanje vremenskog modula,
+# kojim se proverava brzina rada
+from time import time
+
 # Uključivanje funkcionalnog modula
 from functools import partial
 
 # Uključivanje modula sa operatorima
 from operator import gt, itemgetter
+
+# Uključivanje modula sa nitima
+from threading import Thread
+
+# Klasa koja predstavlja nit sa povratnom vrednosti;
+# imena su ista kao za Thread, kako bi se isto ponašali;
+# pri nalaženju konveknog omotača, ubrzava rad sa velikim
+# brojem tačaka u višeprocesorskom okruženju
+class Nit(Thread):
+  # Konstruktor izvedene klase
+  def __init__(self, group = None, target = None, name = None,
+                 args = (), kwargs = {}, Verbose = None):
+    # Pozivanje konstruktora natklase
+    super(Nit, self).__init__(group, target, name, args, kwargs)
+    
+    # Podrazumevano ne postoji povratna vrednost
+    self.rezultat = None
+  
+  # Prevazilaženje metoda za pokretanje niti
+  def run(self):
+    # Ukoliko postoji fja, rezultat je ono što vraća
+    if self._target is not None:
+      self.rezultat = self._target(*self._args, **self._kwargs)
+  
+  # Prevazilaženje metoda za čekanje niti
+  def join(self, *args):
+    # Dočekivanje iz natklase
+    super(Nit, self).join(*args)
+    
+    # Vraćanje sačuvanog rezultata
+    return self.rezultat
 
 # Određivanje položaja prosleđene tačke
 def vekt_proiz(t, u, v):
@@ -26,12 +61,32 @@ def proširi(u, v, tačke):
     if not tačke:
         return []
 
-    # Nalaženje najudaljenije tačke
+    # Nalaženje najekstremnije tačke
     w = min(tačke, key = partial(vekt_proiz, u=u, v=v))
     
+    # Niti za podelu pretrage
+    nit1 = Nit(target = podela, args = (w, v, tačke))
+    nit2 = Nit(target = podela, args = (u, w, tačke))
+    
+    # Pokretanje niti
+    nit1.start()
+    nit2.start()
+    
     # Podela pretrage po određenoj tački
-    t1, t2 = podela(w, v, tačke), podela(u, w, tačke)
-    return proširi(w, v, t1) + [w] + proširi(u, w, t2)
+    t1, t2 = nit1.join(), nit2.join()
+    
+    # Niti za proširivanje pretrage
+    nit1 = Nit(target = proširi, args = (w, v, t1))
+    nit2 = Nit(target = proširi, args = (u, w, t2))
+    
+    # Pokretanje niti
+    nit1.start()
+    nit2.start()
+    
+    # Dohvatanje rezultata
+    p1, p2 = nit1.join(), nit2.join()
+    
+    return p1 + [w] + p2
 
 # Brzi algoritam za pronalazak konveksnog omotača
 def konveksni_omot(tačke):
@@ -39,20 +94,57 @@ def konveksni_omot(tačke):
     if not tačke:
         return []
     
-    # Nalaženje dve tačke omota
-    u = min(tačke, key = itemgetter(0))
-    v = max(tačke, key = itemgetter(0))
+    # Niti za ekstremne tačke
+    nit1 = Nit(target = min, args = [tačke],
+                             kwargs = {'key': itemgetter(0)})
+    nit2 = Nit(target = max, args = [tačke],
+                             kwargs = {'key': itemgetter(0)})
+    
+    # Pokretanje niti
+    nit1.start()
+    nit2.start()
+    
+    # Paralelno nalaženje ektremnih tačaka omota
+    u, v = nit1.join(), nit2.join()
+    
+    # Niti za podelu pretrage
+    nit1 = Nit(target = podela, args = (u, v, tačke))
+    nit2 = Nit(target = podela, args = (v, u, tačke))
+    
+    # Pokretanje niti
+    nit1.start()
+    nit2.start()
     
     # Podela pretrage na levu i desnu stranu
-    levo, desno = podela(u, v, tačke), podela(v, u, tačke)
+    levo, desno = nit1.join(), nit2.join()
+    
+    # Niti za proširivanje pretrage
+    nit1 = Nit(target = proširi, args = (u, v, levo))
+    nit2 = Nit(target = proširi, args = (v, u, desno))
+    
+    # Pokretanje niti
+    nit1.start()
+    nit2.start()
+    
+    # Dohvatanje rezultata
+    p1, p2 = nit1.join(), nit2.join()
 
     # Nalaženje omota na obe strane
-    return [v] + proširi(u, v, levo) + [u] + proširi(v, u, desno)
+    return [v] + p1 + [u] + p2
 
 # Fja za testiranje implementiranog algoritma
 def test():
-  tačke = [(1, 1), (-1, -1), (1, -1), (-1, 1), (0, 0)]
+  # Generisanje milion tačaka
+  tačke = [(i, j) for i in range(1000) for j in range(1000)]
+  
+  # Merenje vremena
+  vreme = time()
+  
+  # Nalaženje konveksnog omotača
   omotač = konveksni_omot(tačke)
+  
+  # Ispis proteklog vremena i omota
+  print('Vreme rada: {}'.format(time()-vreme))
   print(omotač)
 
 if __name__ == '__main__':
