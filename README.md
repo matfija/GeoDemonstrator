@@ -23,7 +23,7 @@ GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https
 ## Podešavanje :memo:
 Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
 
-Osim toga, omogućeno je i direktno pokretanje komandom poput `./main.py`, pošto se na početku svake datoteke sa glavnom (main) fjom nalazi shebang koji sugeriše operativnom sistemu gde se nalazi neophodni interpretator. Naravno, za ovaj pristup je neophodno prethodno učiniti fajl izvršivim komandom poput `chmod u+x main.py`.
+Osim toga, omogućeno je i direktno pokretanje komandom poput `./main.py`, pošto se na početku svake datoteke sa glavnom (main ili test) fjom nalazi shebang koji sugeriše operativnom sistemu gde se nalazi neophodni interpretator. Naravno, za ovaj pristup je neophodno prethodno učiniti fajl izvršivim komandom poput `chmod u+x main.py`.
 
 Program korektno radi i na operativnom sistemu Windows; testiran je na Win10 preko alata [IDLE](https://www.python.org/downloads/release/python-323/).
 

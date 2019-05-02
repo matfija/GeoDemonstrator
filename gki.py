@@ -139,7 +139,7 @@ class GeoDemonstrator(tk.Tk):
       self.ttačke.append(ttačka)
       
       # Log poruka o akciji
-      print('Dodata tačka: (%.2f, %.2f)!' % ttačka)
+      print('Dodata tačka (%.2f, %.2f) na zahtev korisnika!' % ttačka)
       
       # Iscrtavanje figure
       self.nacrtaj_figuru()
@@ -156,7 +156,7 @@ class GeoDemonstrator(tk.Tk):
       self.nacrtaj_figuru()
       
       # Log poruka o akciji
-      print('Zaključen unos tačaka!')
+      print('Zaključen unos tačaka na zahtev korisnika!')
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
       self.dugme_u.config(text = 'Zaključi unos')
@@ -171,7 +171,7 @@ class GeoDemonstrator(tk.Tk):
       self.unos = True
       
       # Log poruka o akciji
-      print('Ponovljen unos tačaka!')
+      print('Ponovljen unos tačaka na zahtev korisnika!')
   
   # Zamena liste tačaka konveksnim omotom
   def ispravi(self):
@@ -182,7 +182,7 @@ class GeoDemonstrator(tk.Tk):
     self.nacrtaj_figuru()
     
     # Log poruka o akciji
-    print('Ispravljena figura!')
+    print('Ispravljena figura na zahtev korisnika!')
   
   # Brisanje platna; ne može sa kratkim
   # self.platno.delete('all') jer se njime
@@ -221,7 +221,7 @@ class GeoDemonstrator(tk.Tk):
   # događaja u GLUT-u obavezno primaju koordinate
   def info(self, *args):
     # Log poruka o akciji
-    print('Ispis informacija o programu!')
+    print('Ispis informacija o programu na zahtev korisnika!')
     
     # Prikazivanje glavnih informacija
     messagebox.showinfo('Informacije',
