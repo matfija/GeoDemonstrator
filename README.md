@@ -14,7 +14,7 @@ Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom
 * funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, apstrakcija listi...,
 * komponentna paradigma: grafički korisnički interfejs, više nezavisnih modula koji predstavljaju ugovorene interfejse,
 * konkurentna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano),
-* programiranje vođeno događajima: GKI, koncept glavnje petlje, osluškivanje i obrada događaja.
+* programiranje vođeno događajima: GKI, koncept glavne petlje, osluškivanje i obrada događaja.
 
 Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: threading, operator, time...
 
@@ -22,6 +22,8 @@ GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https
 
 ## Podešavanje :memo:
 Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
+
+Osim toga, omogućeno je i direktno pokretanje komandom poput `./main.py`, pošto se na početku svake datoteke sa glavnom (main) fjom nalazi shebang koji sugeriše operativnom sistemu gde se nalazi neophodni interpretator. Naravno, za ovaj pristup je neophodno prethodno učiniti fajl izvršivim komandom poput `chmod u+x main.py`.
 
 Program korektno radi i na operativnom sistemu Windows; testiran je na Win10 preko alata [IDLE](https://www.python.org/downloads/release/python-323/).
 

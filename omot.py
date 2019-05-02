@@ -8,7 +8,7 @@ from time import time
 from functools import partial
 
 # Uključivanje modula sa operatorima
-from operator import gt, itemgetter
+from operator import gt, itemgetter as ig
 
 # Uključivanje modula sa nitima
 from threading import Thread
@@ -47,21 +47,22 @@ def vekt_proiz(t, u, v):
   b = (v[0]-u[0], v[1]-u[1])
   
   # Vraćanje dela vektorskog proizvoda
+  # koji ukazuje na orijentaciju tačke
   return a[0]*b[1] - a[1]*b[0]
 
-# Vraćanje tačaka sa leve strane vektora
+# Vraćanje tačaka sa jedne strane vektora
 def podela(u, v, tačke):
     # lambda t: partial(gt, 0)(partial(vekt_proiz, u=u, v=v)(t))
     # return list(filter(lambda t: vekt_proiz(t, u, v) < 0, tačke))
     return [t for t in tačke if vekt_proiz(t, u, v) < 0]
 
-# Proširivanje pretrage omotnih tačaka
+# Proširivanje pretrage tačaka omota
 def proširi(u, v, tačke):
     # Nema proširivanja prazne liste
     if not tačke:
         return []
 
-    # Nalaženje najekstremnije tačke
+    # Nalaženje ekstremne tačke
     w = min(tačke, key = partial(vekt_proiz, u=u, v=v))
     
     # Niti za podelu pretrage
@@ -86,6 +87,7 @@ def proširi(u, v, tačke):
     # Dohvatanje rezultata
     p1, p2 = nit1.join(), nit2.join()
     
+    # Postavljanje određene tačke na svoje mesto
     return p1 + [w] + p2
 
 # Brzi algoritam za pronalazak konveksnog omotača
@@ -95,16 +97,14 @@ def konveksni_omot(tačke):
         return []
     
     # Niti za ekstremne tačke
-    nit1 = Nit(target = min, args = [tačke],
-                             kwargs = {'key': itemgetter(0)})
-    nit2 = Nit(target = max, args = [tačke],
-                             kwargs = {'key': itemgetter(0)})
+    nit1 = Nit(target = min, args = [tačke], kwargs = {'key': ig(0)})
+    nit2 = Nit(target = max, args = [tačke], kwargs = {'key': ig(0)})
     
     # Pokretanje niti
     nit1.start()
     nit2.start()
     
-    # Paralelno nalaženje ektremnih tačaka omota
+    # Paralelno nalaženje ekstremnih tačaka omota
     u, v = nit1.join(), nit2.join()
     
     # Niti za podelu pretrage
@@ -115,12 +115,12 @@ def konveksni_omot(tačke):
     nit1.start()
     nit2.start()
     
-    # Podela pretrage na levu i desnu stranu
-    levo, desno = nit1.join(), nit2.join()
+    # Podela pretrage po određenim tačkama
+    t1, t2 = nit1.join(), nit2.join()
     
     # Niti za proširivanje pretrage
-    nit1 = Nit(target = proširi, args = (u, v, levo))
-    nit2 = Nit(target = proširi, args = (v, u, desno))
+    nit1 = Nit(target = proširi, args = (u, v, t1))
+    nit2 = Nit(target = proširi, args = (v, u, t2))
     
     # Pokretanje niti
     nit1.start()
@@ -147,5 +147,7 @@ def test():
   print('Vreme rada: {}'.format(time()-vreme))
   print(omotač)
 
+# Poziv test funkcije ukoliko
+# je modul direktno izvršen
 if __name__ == '__main__':
   test()

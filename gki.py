@@ -4,15 +4,24 @@ import sys, tkinter as tk
 # Uključivanje modula za nalazak konveksnog omotača
 from omot import konveksni_omot
 
+# Uključivanje funkcionalnog modula
+from functools import partial
+
+# Uključivanje modula sa operatorima
+from operator import mul
+
 # Uključivanje pomoćnog modula za kutijice sa porukama
 from tkinter import messagebox
+
+# Uključivanje geometrijskog modula
+from geom import *
 
 # Nosilac programa je klasa GeoDemonstrator, koja
 # nasleđuje grafičku klasu Tk iz modula tkinter
 class GeoDemonstrator(tk.Tk):
   # Konstruktor aplikacije
   def __init__(self):
-    # Poruka pozdrava za one koji vole konzolu
+    # Log poruka o pokretanju aplikacije
     print('Dobro došli u aplikaciju GeoDemonstrator!')
     
     # Pozivanje konstruktora roditeljske klase
@@ -23,6 +32,7 @@ class GeoDemonstrator(tk.Tk):
     
     # Inicijalizacija liste tačaka
     self.tačke = []
+    self.ttačke = []
     
     # Inicijalizacija liste identifikatora
     # na platnu trenutno iscrtanih tačaka
@@ -30,6 +40,11 @@ class GeoDemonstrator(tk.Tk):
     
     # Inicijalizacija figure
     self.figura = None
+    
+    # Inicijalizacija transformacija iz platna
+    # u iscrtani koordinatni sistem i obrnuto
+    self.puk = Skal(1/7, -1/7) * Trans(-204, -132)
+    self.kup = Trans(204, 132) * Skal(7, -7)
     
     # Inicijalizacija elemenata GKI
     self.init_gki()
@@ -66,6 +81,10 @@ class GeoDemonstrator(tk.Tk):
     # onima iz prethodno postavljenog menija
     self.bind('<F1>', self.info)
     self.bind('<Escape>', self.kraj)
+    
+    # Vezivanje protokola zatvaranja prozora
+    # za istu akciju kao za Kraj i Escape
+    self.protocol('WM_DELETE_WINDOW', self.kraj)
   
   # Inicijalizacija platna
   def init_platno(self):
@@ -81,13 +100,13 @@ class GeoDemonstrator(tk.Tk):
     
     # Postavljanje koordinatnog sistema na platno;
     # slika nije lokalna promenljiva, pošto bi je u
-    # tom slučaju "pojeo" sakupljač otpadaka
+    # tom slučaju 'pojeo' sakupljač otpadaka
     self.slika = tk.PhotoImage(file = 'koord.gif')
     self.platno.create_image(203, 131, image = self.slika)
 
     # Vezivanje čuvanja tačke za klik na platno
     self.unos = True
-    self.platno.bind("<Button-1>", self.dodaj_tačku)
+    self.platno.bind('<Button-1>', self.dodaj_tačku)
   
   # Kontrola unosa tačaka
   def init_unos(self):
@@ -103,15 +122,26 @@ class GeoDemonstrator(tk.Tk):
     self.dugme_u.place(x = 0, y = 0)
     
     # Postavljanje dugmeta za konveksni omotač
-    self.dugme_s = tk.Button(self.okvir_d, text = 'Ispravi figuru',
-                                   command = self.ispravi)
-    self.dugme_s.place(x = 0, y = 40)
+    dugme_s = tk.Button(self.okvir_d, text = 'Ispravi figuru',
+                              command = self.ispravi)
+    dugme_s.place(x = 0, y = 40)
   
-  # Dodavanje pritisnute tačke i iscrtavanje,
-  # ali samo ukoliko je u toku unos tačaka
+  # Dodavanje pritisnute tačke
   def dodaj_tačku(self, dog):
+    # Ukoliko je u toku unos tačaka
     if self.unos:
-      self.tačke.append((dog.x, dog.y))
+      # Dodavanje pritisnute tačke
+      tačka = (dog.x, dog.y)
+      self.tačke.append(tačka)
+      
+      # Čuvanje i u koordinatnom sistemu
+      ttačka = self.puk * tačka
+      self.ttačke.append(ttačka)
+      
+      # Log poruka o akciji
+      print('Dodata tačka: (%.2f, %.2f)!' % ttačka)
+      
+      # Iscrtavanje figure
       self.nacrtaj_figuru()
   
   # Promena teksta u zavisnosti od toga
@@ -124,6 +154,9 @@ class GeoDemonstrator(tk.Tk):
       # Promena stanja unosa i crtanje formiranog mnogougla
       self.unos = False
       self.nacrtaj_figuru()
+      
+      # Log poruka o akciji
+      print('Zaključen unos tačaka!')
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
       self.dugme_u.config(text = 'Zaključi unos')
@@ -131,19 +164,29 @@ class GeoDemonstrator(tk.Tk):
       # Brisanje platna i reinicijalizacija liste tačaka
       self.obriši_platno()
       self.tačke = []
+      self.ttačke = []
       self.id_tač = []
     
       # Promena stanja unosa
       self.unos = True
+      
+      # Log poruka o akciji
+      print('Ponovljen unos tačaka!')
   
   # Zamena liste tačaka konveksnim omotom
   def ispravi(self):
     self.tačke = konveksni_omot(self.tačke)
+    self.ttačke = list(map(partial(mul, self.puk), self.tačke))
     
     # Crtanje ispravljene figure
     self.nacrtaj_figuru()
+    
+    # Log poruka o akciji
+    print('Ispravljena figura!')
   
-  # Brisanje platna
+  # Brisanje platna; ne može sa kratkim
+  # self.platno.delete('all') jer se njime
+  # briše i slika koordinatnog sistema
   def obriši_platno(self):
     # Brisanje prethodno nacrtane figure
     self.platno.delete(self.figura)
@@ -169,14 +212,18 @@ class GeoDemonstrator(tk.Tk):
                      if len(self.tačke) > 1 else None
     else:
       # Inače iscrtavanje mnogougla ukoliko su tačke učitane
-      self.figura = self.platno.create_polygon(self.tačke,
-      outline = 'black', fill = '') if self.tačke else None
+      self.figura = self.platno.create_polygon(self.tačke, outline
+         = 'black', fill = '') if len(self.tačke) > 1 else None
   
   # Prikazivanje glavnih informacija o aplikaciji;
   # *args je neophodan kako bi se prosledili dodatni
   # podaci o događaju tastature, slično kao što fje
   # događaja u GLUT-u obavezno primaju koordinate
   def info(self, *args):
+    # Log poruka o akciji
+    print('Ispis informacija o programu!')
+    
+    # Prikazivanje glavnih informacija
     messagebox.showinfo('Informacije',
                'GeoDemonstrator, seminarski iz Programskih paradigmi.\n\n'
                'Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad'
@@ -193,9 +240,13 @@ class GeoDemonstrator(tk.Tk):
   
   # Zatvaranje aplikacije na zahtev korisnika
   def kraj(self, *args):
-    # Poruka otpozdrava za one koji vole konzolu
-    print('GeoDemonstrator zatvoren na zahtev korisnika!')
-    
-    # Upotreba self.quit() zamrzava prozor na Windows-u,
-    # pošto prekida izvršavanje i pokretačkog programa
-    self.destroy()
+    # Poruka korisniku o kraju programa
+    if messagebox.askyesno('Kraj programa',
+       'Da li stvarno želite da napustite program?'):
+      
+      # Log poruka o zatvaranju aplikacije
+      print('GeoDemonstrator zatvoren na zahtev korisnika!')
+      
+      # Upotreba self.quit() zamrzava prozor na Windows-u,
+      # pošto prekida izvršavanje i pokretačkog programa
+      self.destroy()
