@@ -5,16 +5,22 @@ from threading import Thread
 # pseudoslučajnim brojevima
 from random import randrange
 
+# Uključivanje modula za inspekciju
+from inspect import getmembers, isfunction
+
 # Klasa koja predstavlja nit sa povratnom vrednosti;
 # imena su ista kao za Thread, kako bi se isto ponašali;
 # pri nalaženju konveknog omotača, ubrzava rad sa velikim
 # brojem tačaka u višeprocesorskom okruženju
-class Nit(Thread):
+class StaraNit(Thread):
   # Konstruktor izvedene klase
   def __init__(self, group = None, target = None, name = None,
                  args = (), kwargs = {}, Verbose = None):
     # Pozivanje konstruktora natklase
-    super(Nit, self).__init__(group, target, name, args, kwargs)
+    Thread.__init__(self, group, target, name, args, kwargs)
+    
+    # Čuvanje podatka o 'pričljivosti'
+    self.Verbose = Verbose
     
     # Podrazumevano ne postoji povratna vrednost
     self.rezultat = None
@@ -33,6 +39,43 @@ class Nit(Thread):
     # Vraćanje sačuvanog rezultata
     return self.rezultat
 
+# Pravljenje metaklase prosleđivanjem odgovarajućih
+# argumenata konstruktoru metaklase (to je klasa koja
+# instancra klase, a ne objekte u užem smislu) type:
+# ime klase, n-torka baznih klasa, rečnik klase
+MetaNit = type('MetaNit', tuple([type]), {})
+
+# Definisanje metoda koji se poziva prilikom pravljenja
+# objekata klasâ čija je metaklasa MetaNit
+def poziv(self, *args, **kwargs):
+  # Pravljenje podrazumevanog objekta
+  objekat = type.__call__(self, *args, **kwargs)
+  
+  # Ispisivanje podatka o 'pričljivosti'
+  if objekat.Verbose:
+    print('Instanciran je pričljiv objekat metaklase MetaNit!')
+  
+  # Vraćanje napravljenog objekta
+  return objekat
+
+# Vezivanje definisanog metoda za metaklasu
+MetaNit.__call__ = poziv
+
+# Pravljenje klase Nit kao klase čija je
+# metaklasa MetaNit, a natklasa Thread
+Nit = MetaNit('Nit', tuple([Thread]), {})
+
+# Vezivanje metoda napravljene klase
+# za one napisane za klasu StaraNit
+Nit.__init__ = StaraNit.__init__
+# Nit.run = StaraNit.run
+# Nit.join = StaraNit.join
+
+# Ostalo se dodaje pomoću inspekcije
+for metodi in getmembers(StaraNit, isfunction):
+  if not metodi[0].startswith('_'):
+    exec('Nit.{0} = StaraNit.{0}'.format(metodi[0]))
+
 # Fja za testiranje implementirane klase
 def test():
   # Generisanje deset brojeva
@@ -44,8 +87,8 @@ def test():
   # Definisanje niti koje sa jednakom verovatnoćom
   # traže minimim ili maksimum generisanog niza
   for i in range(10):
-    niti.append(Nit(args = brojevi, target = min
-                if randrange(2) == 0 else max))
+    niti.append(Nit(args = brojevi, target = min if randrange(2)
+                          == 0 else max, Verbose = True))
   
   # Pokretanje niti
   for i in range(10):

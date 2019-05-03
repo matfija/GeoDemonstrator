@@ -14,7 +14,9 @@ Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom
 * funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, apstrakcija listi...,
 * komponentna paradigma: grafički korisnički interfejs, više nezavisnih modula koji predstavljaju ugovorene interfejse,
 * konkurentna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano),
-* programiranje vođeno događajima: GKI, koncept glavne petlje, osluškivanje i obrada događaja.
+* reaktivno i programiranje vođeno događajima: GKI, koncept glavne petlje, osluškivanje i obrada događaja, reakcija na promenu stanja menija sa opcijama prilikom odabira željene transformacije,
+* generičko programiranje: jedan obrazac obrade podataka nezavisno od ulaznih tipova, razni tipovi polimorfizma (magični metodi, dinamička tipiziranost, preopterećivanje operatora...),
+* reflektivno i metaprogramiranje: pisanje programa unutar njega samog (nit sa povratnom vrednosti je u potpunosti ručno, dakle, dinamički definisana), in(tro)spekcija tj. refleksija na ovaj način programirane klase.
 
 Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: threading, operator, time...
 

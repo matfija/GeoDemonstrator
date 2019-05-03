@@ -219,7 +219,7 @@ class GeoDemonstrator(Tk):
   # događaja u GLUT-u obavezno primaju koordinate
   def info(self, *args):
     # Log poruka o akciji
-    print('Ispis informacija o programu na zahtev korisnika!')
+    print('Ispisane informacije o programu na zahtev korisnika!')
     
     # Prikazivanje glavnih informacija
     messagebox.showinfo('Informacije',
