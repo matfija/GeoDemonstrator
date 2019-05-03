@@ -1,5 +1,6 @@
-# Uključivanje sistemskog i grafičkog modula
-import sys, tkinter as tk
+# Uključivanje grafičkog modula
+from tkinter import Tk, Menu, LabelFrame, Canvas, \
+                    PhotoImage, Button, messagebox
 
 # Uključivanje modula za nalazak konveksnog omotača
 from omot import konveksni_omot
@@ -10,15 +11,12 @@ from functools import partial
 # Uključivanje modula sa operatorima
 from operator import mul
 
-# Uključivanje pomoćnog modula za kutijice sa porukama
-from tkinter import messagebox
-
 # Uključivanje geometrijskog modula
 from geom import *
 
 # Nosilac programa je klasa GeoDemonstrator, koja
 # nasleđuje grafičku klasu Tk iz modula tkinter
-class GeoDemonstrator(tk.Tk):
+class GeoDemonstrator(Tk):
   # Konstruktor aplikacije
   def __init__(self):
     # Log poruka o pokretanju aplikacije
@@ -72,7 +70,7 @@ class GeoDemonstrator(tk.Tk):
   def init_meni(self):
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
-    meni = tk.Menu(self)
+    meni = Menu(self)
     meni.add_command(label = 'Info (F1)', command = self.info)
     meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
     self.config(menu = meni)
@@ -89,19 +87,19 @@ class GeoDemonstrator(tk.Tk):
   # Inicijalizacija platna
   def init_platno(self):
     # Pravljenje okvira za platno
-    okvir_p = tk.LabelFrame(self, text = 'Zakoračite u svet geometrijskih'
-                               ' transformacija', padx = 10, pady = 10)
+    okvir_p = LabelFrame(self, text = 'Zakoračite u svet geometrijskih'
+                           ' transformacija', padx = 10, pady = 10)
     okvir_p.place(x = 10, y = 10,
                   height = 300, width = 430)
     
     # Postavljanje platna unutar okvira
-    self.platno = tk.Canvas(okvir_p, height = 261, width = 405)
+    self.platno = Canvas(okvir_p, height = 261, width = 405)
     self.platno.place(x = 0, y = 0)
     
     # Postavljanje koordinatnog sistema na platno;
     # slika nije lokalna promenljiva, pošto bi je u
     # tom slučaju 'pojeo' sakupljač otpadaka
-    self.slika = tk.PhotoImage(file = 'koord.gif')
+    self.slika = PhotoImage(file = 'koord.gif')
     self.platno.create_image(203, 131, image = self.slika)
 
     # Vezivanje čuvanja tačke za klik na platno
@@ -111,19 +109,19 @@ class GeoDemonstrator(tk.Tk):
   # Kontrola unosa tačaka
   def init_unos(self):
     # Pravljenje okvira za dugmad
-    self.okvir_d = tk.LabelFrame(self, text = 'Unosite tačke klikovima'
-                                  ' po platnu', padx = 10, pady = 10)
+    self.okvir_d = LabelFrame(self, text = 'Unosite tačke klikovima'
+                               ' po platnu', padx = 10, pady = 10)
     self.okvir_d.place(x = 10, y = 315,
                        height = 120, width = 430)
     
     # Postavljanje dugmeta za kontrolu unosa
-    self.dugme_u = tk.Button(self.okvir_d, text = 'Zaključi unos',
-                                 command = self.promena_unosa)
+    self.dugme_u = Button(self.okvir_d, text = 'Zaključi unos',
+                              command = self.promena_unosa)
     self.dugme_u.place(x = 0, y = 0)
     
     # Postavljanje dugmeta za konveksni omotač
-    dugme_s = tk.Button(self.okvir_d, text = 'Ispravi figuru',
-                              command = self.ispravi)
+    dugme_s = Button(self.okvir_d, text = 'Ispravi figuru',
+                           command = self.ispravi)
     dugme_s.place(x = 0, y = 40)
   
   # Dodavanje pritisnute tačke

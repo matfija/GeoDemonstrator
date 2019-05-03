@@ -11,35 +11,7 @@ from functools import partial
 from operator import gt, itemgetter as ig
 
 # Uključivanje modula sa nitima
-from threading import Thread
-
-# Klasa koja predstavlja nit sa povratnom vrednosti;
-# imena su ista kao za Thread, kako bi se isto ponašali;
-# pri nalaženju konveknog omotača, ubrzava rad sa velikim
-# brojem tačaka u višeprocesorskom okruženju
-class Nit(Thread):
-  # Konstruktor izvedene klase
-  def __init__(self, group = None, target = None, name = None,
-                 args = (), kwargs = {}, Verbose = None):
-    # Pozivanje konstruktora natklase
-    super(Nit, self).__init__(group, target, name, args, kwargs)
-    
-    # Podrazumevano ne postoji povratna vrednost
-    self.rezultat = None
-  
-  # Prevazilaženje metoda za pokretanje niti
-  def run(self):
-    # Ukoliko postoji fja, rezultat je ono što vraća
-    if self._target is not None:
-      self.rezultat = self._target(*self._args, **self._kwargs)
-  
-  # Prevazilaženje metoda za čekanje niti
-  def join(self, *args):
-    # Dočekivanje iz natklase
-    super(Nit, self).join(*args)
-    
-    # Vraćanje sačuvanog rezultata
-    return self.rezultat
+from nit import Nit
 
 # Određivanje položaja prosleđene tačke
 def vekt_proiz(t, u, v):
@@ -138,13 +110,16 @@ def test():
   tačke = [(i, j) for i in range(1000) for j in range(1000)]
   
   # Merenje vremena
-  vreme = time()
+  vreme1 = time()
   
   # Nalaženje konveksnog omotača
   omotač = konveksni_omot(tačke)
   
+  # Merenje vremena
+  vreme2 = time()
+  
   # Ispis proteklog vremena i omota
-  print('Vreme rada: {}'.format(time()-vreme))
+  print('Vreme rada: {}'.format(vreme2 - vreme1))
   print(omotač)
 
 # Poziv test funkcije ukoliko

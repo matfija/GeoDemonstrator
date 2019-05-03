@@ -93,7 +93,7 @@ class Tačka:
   
   # Uobičajena string predstava tačke
   def __str__(self):
-    return 'Tačka:\n[(%.2f, %.2f)]' % (self.mat[0], self.mat[1])
+    return 'Tačka:\n[(%.2f, %.2f)]' % (self[0], self[1])
 
 # Fja za testiranje implementiranih klasa;
 # predlaže se pokretanje sa < test.py, gde
@@ -109,8 +109,7 @@ def test():
   # u pitanju je poznata RE(P)L petlja
   while True:
     try:
-      linija = input()
-      exec(linija)
+      exec(input())
     except EOFError:
       print('Kraj ulaza.')
       break
