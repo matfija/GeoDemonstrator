@@ -41,7 +41,7 @@ class StaraNit(Thread):
 
 # Pravljenje metaklase prosleđivanjem odgovarajućih
 # argumenata konstruktoru metaklase (to je klasa koja
-# instancra klase, a ne objekte u užem smislu) type:
+# instancira klase, a ne objekte u užem smislu) type:
 # ime klase, n-torka baznih klasa, rečnik klase
 MetaNit = type('MetaNit', tuple([type]), {})
 
