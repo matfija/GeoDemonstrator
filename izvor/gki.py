@@ -6,8 +6,12 @@ from sys import exit as greška
 from os.path import join as put
 
 # Uključivanje grafičkog modula
-from tkinter import Tk, Menu, LabelFrame, Canvas, \
-                    PhotoImage, Button, messagebox
+from tkinter import *
+from tkinter import messagebox
+
+#Tk, Menu, LabelFrame, Canvas, \
+#                   PhotoImage, Button, messagebox, \
+#                    Label, StringVar, OptionMenu
 
 # Uključivanje modula za nalazak konveksnog omotača
 from omot import konveksni_omot
@@ -113,6 +117,23 @@ class GeoDemonstrator(Tk):
     self.unos = True
     self.platno.bind('<Button-1>', self.dodaj_tačku)
   
+  def tranformacije(self):
+
+    self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', padx = 10, pady = 10)
+    self.okvir_t.place(x = 140, y = 336,
+                       height = 99, width = 180)
+
+    var = StringVar(self)
+    var.set('                  ')
+    var.trace('w', None) # fja za pracenje promenljive
+
+    self.option = OptionMenu(self.okvir_t, var, 'translacija', 'skaliranje', 'smicanje', 'rotacija', 'refleksija').pack()
+
+    dugme_t = Button(self.okvir_t, text = 'Transformisi', command = None).pack() # ideja za komandu u gornjem delu
+    #dugme_t.place(x = 0, y = 5)
+
+    self.mainloop()
+  
   # Kontrola unosa tačaka
   def init_unos(self):
     # Pravljenje okvira za dugmad
@@ -130,7 +151,10 @@ class GeoDemonstrator(Tk):
     dugme_s = Button(self.okvir_d, text = 'Ispravi figuru',
                            command = self.ispravi)
     dugme_s.place(x = 0, y = 40)
-  
+    
+    self.tranformacije()
+    
+    
   # Dodavanje pritisnute tačke
   def dodaj_tačku(self, dog):
     # Ukoliko je u toku unos tačaka
