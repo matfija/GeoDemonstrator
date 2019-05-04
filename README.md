@@ -1,5 +1,5 @@
 #### KriLa
-<img width="700" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/2019_04_29.png">
+<img width="700" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/slike/2019_04_29.png">
 
 ## GeoDemonstrator :loop:
 Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
@@ -16,9 +16,9 @@ Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom
 * konkurentna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano),
 * reaktivno i programiranje vođeno događajima: GKI, koncept glavne petlje, osluškivanje i obrada događaja, reakcija na promenu stanja menija sa opcijama prilikom odabira željene transformacije,
 * generičko programiranje: jedan obrazac obrade podataka nezavisno od ulaznih tipova, razni tipovi polimorfizma (magični metodi, dinamička tipiziranost, preopterećivanje operatora...),
-* reflektivno i metaprogramiranje: pisanje programa unutar njega samog (nit sa povratnom vrednosti je u potpunosti ručno, dakle, dinamički definisana), in(tro)spekcija tj. refleksija na ovaj način programirane klase.
+* reflektivno i metaprogramiranje: pisanje programa unutar njega samog (nit sa povratnom vrednosti je u potpunosti ručno, dakle, dinamički definisana), in(tro)spekcija tj. refleksija na ovaj način napisane klase.
 
-Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: threading, operator, time...
+Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima: tkinter, threading, operator, time, inspect, types... Naravno, nisu izostavljeni ni oni upotrebljavani: sys, os, math, functools, random...
 
 GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https://docs.python.org/3/library/tkinter.html) – koji se može podesiti komandom poput `sudo apt-get install python3-tk` za Ubuntu za starije verzije, dok je za novije automatski podešen.
 

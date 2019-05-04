@@ -1,3 +1,10 @@
+#!/usr/bin/env python3
+
+# Uključivanje sistemskog modula, kao i
+# modula za rad sa datotečnim sistemom
+from sys import exit as greška
+from os.path import join as put
+
 # Uključivanje grafičkog modula
 from tkinter import Tk, Menu, LabelFrame, Canvas, \
                     PhotoImage, Button, messagebox
@@ -23,7 +30,7 @@ class GeoDemonstrator(Tk):
     print('Dobro došli u aplikaciju GeoDemonstrator!')
     
     # Pozivanje konstruktora roditeljske klase
-    super(GeoDemonstrator, self).__init__()
+    super().__init__()
     
     # Postavljanje naziva aplikacije
     self.title('GeoDemonstrator')
@@ -99,7 +106,7 @@ class GeoDemonstrator(Tk):
     # Postavljanje koordinatnog sistema na platno;
     # slika nije lokalna promenljiva, pošto bi je u
     # tom slučaju 'pojeo' sakupljač otpadaka
-    self.slika = PhotoImage(file = 'koord.gif')
+    self.slika = PhotoImage(file = put('..', 'slike', 'koord.gif'))
     self.platno.create_image(203, 131, image = self.slika)
 
     # Vezivanje čuvanja tačke za klik na platno
@@ -248,3 +255,8 @@ class GeoDemonstrator(Tk):
       # Upotreba self.quit() zamrzava prozor na Windows-u,
       # pošto prekida izvršavanje i pokretačkog programa
       self.destroy()
+
+# Obaveštenje o greški ukoliko je modul
+# pokrenut kao samostalan program
+if __name__ == '__main__':
+  greška('GKI nije samostalan program! Pokrenite main!')
