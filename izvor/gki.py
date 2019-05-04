@@ -117,21 +117,26 @@ class GeoDemonstrator(Tk):
     self.unos = True
     self.platno.bind('<Button-1>', self.dodaj_tačku)
   
+  # Transformacijski okvir
   def tranformacije(self):
 
-    self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', padx = 10, pady = 10)
+    self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
+                              padx = 10, pady = 10)
     self.okvir_t.place(x = 140, y = 336,
                        height = 99, width = 180)
 
+    # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
+    # pozivamo odgovarajucu funkciju transformacije
     var = StringVar(self)
     var.set('                  ')
-    var.trace('w', None) # fja za pracenje promenljive
+    
+    self.option = OptionMenu(self.okvir_t, var, 'translacija', 'skaliranje', 
+                             'smicanje', 'rotacija', 'refleksija').pack()
 
-    self.option = OptionMenu(self.okvir_t, var, 'translacija', 'skaliranje', 'smicanje', 'rotacija', 'refleksija').pack()
-
-    dugme_t = Button(self.okvir_t, text = 'Transformisi', command = None).pack() # ideja za komandu u gornjem delu
-    #dugme_t.place(x = 0, y = 5)
-
+    dugme_t = Button(self.okvir_t, text = 'Transformisi', command = None).pack()
+    
+    var.trace('w', None) # funkcija za pracenje promenljive
+    
     self.mainloop()
   
   # Kontrola unosa tačaka
