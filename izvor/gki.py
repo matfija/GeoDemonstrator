@@ -256,7 +256,7 @@ class GeoDemonstrator(Tk):
       # pošto prekida izvršavanje i pokretačkog programa
       self.destroy()
 
-# Obaveštenje o greški ukoliko je modul
+# Obaveštenje o grešci ukoliko je modul
 # pokrenut kao samostalan program
 if __name__ == '__main__':
   greška('GKI nije samostalan program! Pokrenite main!')
