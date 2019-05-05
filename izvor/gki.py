@@ -132,9 +132,18 @@ class GeoDemonstrator(Tk):
       
     def unos_transformacije(*args):
         print("Uneli ste novu transformaciju!")
-        print("Odabrali ste: {}".format(str(var.get())))
-        self.odabrana_transformacija = self.funkcije[var.get()]
-        #print(self.odabrana_transformacija)
+        tr = var.get()
+        print("Odabrali ste: {}".format(str(tr)))
+        self.odabrana_transformacija = self.funkcije[tr]
+        
+        if tr == 'translacija' or tr == 'smicanje' or tr == 'skaliranje':
+            x_koord.configure(state = 'normal')
+            y_koord.configure(state = 'normal')
+            ugao.configure(state = 'disabled')
+        else:
+            x_koord.configure(state = 'disabled')
+            y_koord.configure(state = 'disabled')
+            ugao.configure(state = 'normal')
         
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
