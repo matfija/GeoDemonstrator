@@ -122,22 +122,24 @@ class GeoDemonstrator(Tk):
     
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
-                              padx = 10, pady = 10)
-    self.okvir_t.place(x = 140, y = 336,
-                       height = 99, width = 168)
+                              padx = 5, pady = 5)
+    self.okvir_t.place(x = 150, y = 340,
+                       height = 91, width = 150)
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
     # pozivamo odgovarajucu funkciju transformacije
     var = StringVar(self)
-    var.set('                  ')
+    var.set('                 f ')
     
     # Padajuca lista geometrijskih transformacija
-    self.option = OptionMenu(self.okvir_t, var, 'translacija', 
+    self.option = OptionMenu(self.okvir_t, var, 
+                             'translacija', 
                              'skaliranje', 
                              'smicanje', 
                              'rotacija', 
                              'refleksija').pack()
     
+    print("Odabrali ste transformaciju: {}".format(str(var.get())))
     # Postavljanje dugmeta za pokretanje transformacije
     dugme_t = Button(self.okvir_t, text = 'Transformisi', 
                      command = None).pack()
@@ -145,12 +147,12 @@ class GeoDemonstrator(Tk):
     # Naslovi parametara koje korisnik unosi
     x_koord_labela = Label(self, text = 'x:') 
     y_koord_labela = Label(self, text = 'y:') 
-    ugao_labela = Label(self, text = 'ugao:') 
+    ugao_labela = Label(self, text = u"\u03B8:") 
     
     # Promena pozicije elemenata
     x_koord_labela.place(x = 320, y = 345)
     y_koord_labela.place(x = 320, y = 370)
-    ugao_labela.place(x = 309, y = 395)
+    ugao_labela.place(x = 320, y = 395)
     
     # Polja za unos vrednosti transformacija
     x_koord = Entry(self)
@@ -162,9 +164,9 @@ class GeoDemonstrator(Tk):
     y_koord.grid(row = 1, column = 1)
     
     # Konfiguracija elemenata, postavljanje sirine polja za unos parametara
-    x_koord.config(width = 10)
-    y_koord.config(width = 10)
-    ugao.config(width = 10)
+    x_koord.config(width = 5)
+    y_koord.config(width = 5)
+    ugao.config(width = 5)
     
     # Promena pozicije elemenata
     x_koord.place(x = 347, y = 345)
@@ -175,6 +177,9 @@ class GeoDemonstrator(Tk):
     var.trace('w', None) 
     
     self.mainloop()
+  
+  
+      
   
   # Kontrola unosa tačaka
   def init_unos(self):
