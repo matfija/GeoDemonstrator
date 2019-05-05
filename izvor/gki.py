@@ -121,6 +121,11 @@ class GeoDemonstrator(Tk):
   def transformisi(self, *args):
       print ("Transformišem!")
       
+      
+      
+      if self.x_koord.get() == '' or self.x_koord.get() == '':
+          messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+      
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
       self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
@@ -131,7 +136,7 @@ class GeoDemonstrator(Tk):
       
       if any(map(lambda t: t[0] < -29 or t[1] < -19 or
                        t[0] > 29 or t[1] > 19, nttacke)):
-        messagebox.showerror('Greška!', 'Neuspela transformacija!')
+        messagebox.showerror('Greška', 'Neuspela transformacija!')
       else:
         self.ttačke = nttacke
         self.tačke = list(map(partial(mul, self.kup), self.ttačke))
