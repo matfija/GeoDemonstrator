@@ -121,7 +121,7 @@ class GeoDemonstrator(Tk):
   def transformisi(self, *args):
       print ("Transformišem!")
       
-      # Preslikavanje stringa u odgavarajucu matricu transformacije
+      # Preslikavanje stringa u odgovarajucu matricu transformacije
       self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
       print(self.odabrana_transformacija)
       print(self.ttačke)
@@ -138,8 +138,8 @@ class GeoDemonstrator(Tk):
     
     # Mapa za preslikavanje stringa u odgavarajucu matricu transformacije
     self.funkcije = {'translacija': Trans, 'skaliranje': Skal, 
-                     'smicanje': Smic(), 'rotacija': Rot(),
-                     'refleksija': Refl()}
+                     'smicanje': Smic, 'rotacija': Rot,
+                     'refleksija': Refl}
       
     def unos_transformacije(*args):
         print("Uneli ste novu transformaciju!")
