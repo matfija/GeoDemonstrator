@@ -121,14 +121,17 @@ class GeoDemonstrator(Tk):
   def transformisi(self, *args):
       print ("Transformišem!")
       
-      
-      
-      if self.x_koord.get() == '' or self.x_koord.get() == '':
-          messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
-      
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
-      self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
+      if self.tr == 'rotacija' or self.tr == 'refleksija':
+        if self.ugao.get() == '':
+            messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
+      else:
+        if self.x_koord.get() == '' or self.x_koord.get() == '':
+            messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
+          
       print(self.odabrana_transformacija)
       print(self.ttačke)
       nttacke = list(map(partial(mul, self.odabrana_transformacija), self.ttačke))
