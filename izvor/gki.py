@@ -123,13 +123,13 @@ class GeoDemonstrator(Tk):
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
                               padx = 5, pady = 5)
-    self.okvir_t.place(x = 150, y = 340,
-                       height = 91, width = 150)
+    self.okvir_t.place(x = 150, y = 337,
+                       height = 91, width = 170)
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
     # pozivamo odgovarajucu funkciju transformacije
     var = StringVar(self)
-    var.set('                 f ')
+    var.set('                 ')
     
     # Padajuca lista geometrijskih transformacija
     self.option = OptionMenu(self.okvir_t, var, 
@@ -141,7 +141,7 @@ class GeoDemonstrator(Tk):
     
     print("Odabrali ste transformaciju: {}".format(str(var.get())))
     # Postavljanje dugmeta za pokretanje transformacije
-    dugme_t = Button(self.okvir_t, text = 'Transformisi', 
+    dugme_t = Button(self.okvir_t, text = 'Transformiši', 
                      command = None).pack()
     
     # Naslovi parametara koje korisnik unosi
@@ -150,9 +150,9 @@ class GeoDemonstrator(Tk):
     ugao_labela = Label(self, text = u"\u03B8:") 
     
     # Promena pozicije elemenata
-    x_koord_labela.place(x = 320, y = 345)
-    y_koord_labela.place(x = 320, y = 370)
-    ugao_labela.place(x = 320, y = 395)
+    x_koord_labela.place(x = 325, y = 345)
+    y_koord_labela.place(x = 325, y = 370)
+    ugao_labela.place(x = 325, y = 395)
     
     # Polja za unos vrednosti transformacija
     x_koord = Entry(self)
@@ -169,9 +169,9 @@ class GeoDemonstrator(Tk):
     ugao.config(width = 5)
     
     # Promena pozicije elemenata
-    x_koord.place(x = 347, y = 345)
-    y_koord.place(x = 347, y = 370)
-    ugao.place(x = 347, y = 395)
+    x_koord.place(x = 345, y = 345)
+    y_koord.place(x = 345, y = 370)
+    ugao.place(x = 345, y = 395)
 
     # Funkcija za pracenje promenljive
     var.trace('w', None) 
