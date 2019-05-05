@@ -117,7 +117,12 @@ class GeoDemonstrator(Tk):
     self.unos = True
     self.platno.bind('<Button-1>', self.dodaj_tačku)
   
-  
+  # Funkcija za transformisanje kreiranog poligona
+  def transformisi(self, *args):
+      print ("Transformišem!")
+      
+      
+      
   # Transformacijski okvir
   def tranformacije(self):
     
@@ -127,8 +132,10 @@ class GeoDemonstrator(Tk):
       
     def unos_transformacije(*args):
         print("Uneli ste novu transformaciju!")
-        print("Odabrali ste: {}".format(str(self.var.get())))
-    
+        print("Odabrali ste: {}".format(str(var.get())))
+        self.odabrana_transformacija = self.funkcije[var.get()]
+        #print(self.odabrana_transformacija)
+        
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
                               padx = 5, pady = 5)
@@ -137,13 +144,13 @@ class GeoDemonstrator(Tk):
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
     # pozivamo odgovarajucu funkciju transformacije
-    self.var = StringVar(self)
-    self.var.set('                 ')
+    var = StringVar(self)
+    var.set('                 ')
     # Funkcija za pracenje promenljive
-    self.var.trace('w', unos_transformacije)
+    var.trace('w', unos_transformacije)
     
     # Padajuca lista geometrijskih transformacija
-    self.option = OptionMenu(self.okvir_t, self.var, 
+    self.option = OptionMenu(self.okvir_t, var, 
                              'translacija', 
                              'skaliranje', 
                              'smicanje', 
@@ -152,7 +159,7 @@ class GeoDemonstrator(Tk):
     
     # Postavljanje dugmeta za pokretanje transformacije
     dugme_t = Button(self.okvir_t, text = 'Transformiši', 
-                     command = None).pack()
+                     command = self.transformisi).pack()
     
     # Naslovi parametara koje korisnik unosi
     x_koord_labela = Label(self, text = 'x:') 
