@@ -119,28 +119,40 @@ class GeoDemonstrator(Tk):
   
   # Funkcija za transformisanje kreiranog poligona
   def transformisi(self, *args):
+      
       print ("Transformišem!")
       
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
       if self.tr == 'rotacija' or self.tr == 'refleksija':
+        # Greska ako nije unet ugao
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
       else:
         if self.x_koord.get() == '' or self.x_koord.get() == '':
+            # Greska ako nisu uneti x i y
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
-        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
-          
+        self.odabrana_transformacija = (self.funkcije[self.tr])
+        (float(self.x_koord.get()), float(self.y_koord.get()))
+      
+      '''
+      Ako je potrebno stampati vrednosti: 
       print(self.odabrana_transformacija)
       print(self.ttačke)
+      '''
+      # Nove transformisane tacke sa vrednostima koordinatnom sistemu sa slike
       nttacke = list(map(partial(mul, self.odabrana_transformacija), self.ttačke))
-      print(nttacke)
+      #print(nttacke)
       
+      # Provera da nisu tacke otisle van koordinatnog sistema sa slike tj. platna
       if any(map(lambda t: t[0] < -29 or t[1] < -19 or
                        t[0] > 29 or t[1] > 19, nttacke)):
         messagebox.showerror('Greška', 'Neuspela transformacija!')
       else:
+        # U slucaju da je korektno, iscrtava se transformisan poligon
+        # ttacke -> lista tacaka u koordinatnom sistemu sa slike
+        # tacke -> lista tacaka u koordinatnom sistemu platna
         self.ttačke = nttacke
         self.tačke = list(map(partial(mul, self.kup), self.ttačke))
         self.nacrtaj_figuru()
@@ -164,6 +176,7 @@ class GeoDemonstrator(Tk):
         if self.tr == 'translacija' or self.tr == 'smicanje' or self.tr == 'skaliranje':
             self.x_koord.configure(state = 'normal')
             self.y_koord.configure(state = 'normal')
+            # Brisanje unete vrednosti parametra
             self.ugao.delete(0,END)
             self.ugao.configure(state = 'disabled')
         else:
