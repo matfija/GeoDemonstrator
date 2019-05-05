@@ -130,8 +130,7 @@ class GeoDemonstrator(Tk):
       
       if any(map(lambda t: t[0] < -29 or t[1] < -19 or
                        t[0] > 29 or t[1] > 19, nttacke)):
-        messagebox.error('Neuspela transformacija!')
-      
+        messagebox.showerror('Greška!', 'Neuspela transformacija!')      
       
   # Transformacijski okvir
   def tranformacije(self):
