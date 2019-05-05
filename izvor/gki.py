@@ -120,7 +120,7 @@ class GeoDemonstrator(Tk):
   # Funkcija za transformisanje kreiranog poligona
   def transformisi(self, *args):
       
-      print ("Transformišem!")
+      print ("Transformišem - {}!". format(self.tr))
       
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
@@ -133,8 +133,7 @@ class GeoDemonstrator(Tk):
         if self.x_koord.get() == '' or self.x_koord.get() == '':
             # Greska ako nisu uneti x i y
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
-        self.odabrana_transformacija = (self.funkcije[self.tr])
-        (float(self.x_koord.get()), float(self.y_koord.get()))
+        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
       
       '''
       Ako je potrebno stampati vrednosti: 
