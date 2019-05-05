@@ -164,9 +164,12 @@ class GeoDemonstrator(Tk):
         if self.tr == 'translacija' or self.tr == 'smicanje' or self.tr == 'skaliranje':
             self.x_koord.configure(state = 'normal')
             self.y_koord.configure(state = 'normal')
+            self.ugao.delete(0,END)
             self.ugao.configure(state = 'disabled')
         else:
+            self.x_koord.delete(0,END)
             self.x_koord.configure(state = 'disabled')
+            self.y_koord.delete(0,END)
             self.y_koord.configure(state = 'disabled')
             self.ugao.configure(state = 'normal')
         
