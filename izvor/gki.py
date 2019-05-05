@@ -121,29 +121,42 @@ class GeoDemonstrator(Tk):
   def transformisi(self, *args):
       print ("Transformišem!")
       
+      # Preslikavanje stringa u odgavarajucu matricu transformacije
+      self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
+      print(self.odabrana_transformacija)
+      print(self.ttačke)
+      nttacke = list(map(partial(mul, self.odabrana_transformacija), self.ttačke))
+      print(nttacke)
+      
+      if any(map(lambda t: t[0] < -29 or t[1] < -19 or
+                       t[0] > 29 or t[1] > 19, nttacke)):
+        messagebox.error('Neuspela transformacija!')
       
       
   # Transformacijski okvir
   def tranformacije(self):
     
-    self.funkcije = {'translacija': Trans(), 'skaliranje': Skal(), 
+    # Mapa za preslikavanje stringa u odgavarajucu matricu transformacije
+    self.funkcije = {'translacija': Trans, 'skaliranje': Skal, 
                      'smicanje': Smic(), 'rotacija': Rot(),
                      'refleksija': Refl()}
       
     def unos_transformacije(*args):
         print("Uneli ste novu transformaciju!")
-        tr = var.get()
-        print("Odabrali ste: {}".format(str(tr)))
-        self.odabrana_transformacija = self.funkcije[tr]
+        # Citanje vrednosti odabrane transformacije iz padajuce liste
+        self.tr = var.get()
+        print("Odabrali ste: {}".format(str(self.tr)))
         
-        if tr == 'translacija' or tr == 'smicanje' or tr == 'skaliranje':
-            x_koord.configure(state = 'normal')
-            y_koord.configure(state = 'normal')
-            ugao.configure(state = 'disabled')
+        # Dozvola i zabrana pristupa poljima za unos parametara 
+        # u zavisnosti od odabrane transformacije
+        if self.tr == 'translacija' or self.tr == 'smicanje' or self.tr == 'skaliranje':
+            self.x_koord.configure(state = 'normal')
+            self.y_koord.configure(state = 'normal')
+            self.ugao.configure(state = 'disabled')
         else:
-            x_koord.configure(state = 'disabled')
-            y_koord.configure(state = 'disabled')
-            ugao.configure(state = 'normal')
+            self.x_koord.configure(state = 'disabled')
+            self.y_koord.configure(state = 'disabled')
+            self.ugao.configure(state = 'normal')
         
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
@@ -181,23 +194,23 @@ class GeoDemonstrator(Tk):
     ugao_labela.place(x = 325, y = 395)
     
     # Polja za unos vrednosti transformacija
-    x_koord = Entry(self)
-    y_koord = Entry(self)
-    ugao = Entry(self)
+    self.x_koord = Entry(self)
+    self.y_koord = Entry(self)
+    self.ugao = Entry(self)
     
     # Opcija za postavljanje elemenata u tabloliku strukturu
-    x_koord.grid(row = 0, column = 1)
-    y_koord.grid(row = 1, column = 1)
+    self.x_koord.grid(row = 0, column = 1)
+    self.y_koord.grid(row = 1, column = 1)
     
     # Konfiguracija elemenata, postavljanje sirine polja za unos parametara
-    x_koord.config(width = 5)
-    y_koord.config(width = 5)
-    ugao.config(width = 5)
+    self.x_koord.config(width = 5)
+    self.y_koord.config(width = 5)
+    self.ugao.config(width = 5)
     
     # Promena pozicije elemenata
-    x_koord.place(x = 345, y = 345)
-    y_koord.place(x = 345, y = 370)
-    ugao.place(x = 345, y = 395)
+    self.x_koord.place(x = 345, y = 345)
+    self.y_koord.place(x = 345, y = 370)
+    self.ugao.place(x = 345, y = 395)
     
     self.mainloop()
   
