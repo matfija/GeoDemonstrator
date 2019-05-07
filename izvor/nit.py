@@ -3,6 +3,17 @@
 # Uključivanje modula sa nitima
 from threading import Thread
 
+# NAPOMENA: prava konkurentnost u Pajtonu postiže se
+# multiprocesiranjem;= naime, najčešća implementacija
+# Pajtona (C-ovski CPython) radi tako što glavna nit
+# takom rada drži interpretator zaključanim; na taj
+# način je optimizovano izvršavanje jednonitnih programa,
+# ali zato ne postoji ubrzanje ukoliko se koristi više
+# niti; program je čak i sportiji, što i nije neobično
+# sa obzirom na cenu pravljenja niti i promene konteksta
+# from multiprocessing import Process as Thread
+# from multiprocessing import Pool
+
 # Uključivanje modula sa
 # pseudoslučajnim brojevima
 from random import randrange
@@ -16,8 +27,8 @@ from types import FunctionType
 
 # Klasa koja predstavlja nit sa povratnom vrednosti;
 # imena su ista kao za Thread, kako bi se isto ponašali;
-# pri nalaženju konveknog omotača, ubrzava rad sa velikim
-# brojem tačaka u višeprocesorskom okruženju
+# pri nalaženju konveknog omotača, teorijski ubrzava rad
+# sa velikim brojem tačaka u višeprocesorskom okruženju
 class StaraNit(Thread):
   # Konstruktor izvedene klase
   def __init__(self, group = None, target = None, name = None,
@@ -34,7 +45,7 @@ class StaraNit(Thread):
   # Prevazilaženje metoda za pokretanje niti
   def run(self):
     # Ukoliko postoji fja, rezultat je ono što vraća
-    if self._target is not None:
+    if self._target:
       self.rezultat = self._target(*self._args, **self._kwargs)
   
   # Prevazilaženje metoda za čekanje niti
@@ -87,12 +98,12 @@ for metod in getmembers(StaraNit, isfunction):
     # Izdvajanje metoda
     met = getattr(StaraNit, metod[0])
     
-    # Pravljenje duboke kopije metoda
-    fja = FunctionType(met.__code__, met.__globals__,
-    met.__name__, met.__defaults__, met.__closure__)
-    
     # Dodeljivanje napravljenog metoda
-    exec('Nit.{} = fja'.format(metod[0]))
+    # exec('Nit.{} = fja'.format(metod[0]))
+    
+    # Pravljenje duboke kopije metoda
+    setattr(Nit, metod[0], FunctionType(met.__code__, met.__globals__,
+                        met.__name__, met.__defaults__, met.__closure__))
 
 # Fja za testiranje implementirane klase
 def test():

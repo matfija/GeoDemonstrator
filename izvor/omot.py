@@ -69,8 +69,8 @@ def konveksni_omot(tačke):
         return []
     
     # Niti za ekstremne tačke
-    nit1 = Nit(target = min, args = [tačke], kwargs = {'key': ig(0)})
-    nit2 = Nit(target = max, args = [tačke], kwargs = {'key': ig(0)})
+    nit1 = Nit(target = min, args = tačke, kwargs = {'key': ig(0)})
+    nit2 = Nit(target = max, args = tačke, kwargs = {'key': ig(0)})
     
     # Pokretanje niti
     nit1.start()
