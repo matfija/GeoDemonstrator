@@ -134,11 +134,20 @@ class GeoDemonstrator(Tk):
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
-      elif (self.tr == 'rotacija' and self.nacin_rotacije == 'oko centra mase'):
+      elif self.tr == 'rotacija':
           centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
                          sum(map(ig(1), t))/len(t))
-          t1, t2 = centar_mase(self.ttačke)
           u = float(self.ugao.get())
+          
+          if self.nacin_rotacije == 'oko centra mase':
+            t1, t2 = centar_mase(self.ttačke)
+          elif self.nacin_rotacije == 'oko tacke':
+            if self.x_koord.get() == '' or self.x_koord.get() == '':
+            # Greska ako nisu uneti x i y
+                messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+            t1 = float(self.x_koord.get())
+            t2 = float(self.y_koord.get())
+          
           self.odabrana_transformacija = Trans(t1,t2)*(self.funkcije[self.tr])(u)*Trans(-t1,-t2)
     
       else:
@@ -190,11 +199,15 @@ class GeoDemonstrator(Tk):
             # Brisanje unete vrednosti parametra
             self.ugao.delete(0,END)
             self.ugao.configure(state = 'disabled')
-        else:
+        elif self.nacin_rotacije != 'oko tacke':
             self.x_koord.delete(0,END)
             self.x_koord.configure(state = 'disabled')
             self.y_koord.delete(0,END)
             self.y_koord.configure(state = 'disabled')
+            self.ugao.configure(state = 'normal')
+        else:
+            self.x_koord.configure(state = 'normal')
+            self.y_koord.configure(state = 'normal')
             self.ugao.configure(state = 'normal')
         
     # Pravljenje okvira za odabir transformacije
