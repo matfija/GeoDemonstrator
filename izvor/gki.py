@@ -81,10 +81,15 @@ class GeoDemonstrator(Tk):
   def init_meni(self):
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
-    meni = Menu(self)
-    meni.add_command(label = 'Info (F1)', command = self.info)
-    meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
-    self.config(menu = meni)
+    self.meni = Menu(self)
+    self.meni.add_command(label = 'Info (F1)', command = self.info)
+    self.meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
+    # Kontrola unosa tačaka
+    self.meni.add_command(label = 'Zaključi unos', command =
+    self.promena_unosa)
+    self.meni.add_command(label = 'Ispravi figuru', command =
+    self.ispravi)
+    self.config(menu = self.meni)
     
     # Vezivanje tipki za akcije analogne
     # onima iz prethodno postavljenog menija
@@ -241,7 +246,7 @@ class GeoDemonstrator(Tk):
     
     self.mainloop()
   
-  # Kontrola unosa tačaka
+  # Okvir za magični svet transformacija
   def init_unos(self):
     # Pravljenje okvira za dugmad
     self.okvir_d = LabelFrame(self, text = 'Unosite tačke klikovima'
@@ -249,18 +254,7 @@ class GeoDemonstrator(Tk):
     self.okvir_d.place(x = 10, y = 315,
                        height = 120, width = 430)
     
-    # Postavljanje dugmeta za kontrolu unosa
-    self.dugme_u = Button(self.okvir_d, text = 'Zaključi unos',
-                              command = self.promena_unosa)
-    self.dugme_u.place(x = 0, y = 0)
-    
-    # Postavljanje dugmeta za konveksni omotač
-    dugme_s = Button(self.okvir_d, text = 'Ispravi figuru',
-                           command = self.ispravi)
-    dugme_s.place(x = 0, y = 40)
-    
     self.tranformacije()
-    
     
   # Dodavanje pritisnute tačke
   def dodaj_tačku(self, dog):
@@ -285,7 +279,7 @@ class GeoDemonstrator(Tk):
   def promena_unosa(self):
     if self.unos:
       self.okvir_d.config(text = 'Transformišite figuru pomoću dugmadi')
-      self.dugme_u.config(text = 'Ponovi unos')
+      self.meni.entryconfig(3, label = 'Ponovi unos')
       
       # Promena stanja unosa i crtanje formiranog mnogougla
       self.unos = False
@@ -295,7 +289,7 @@ class GeoDemonstrator(Tk):
       print('Zaključen unos tačaka na zahtev korisnika!')
     else:
       self.okvir_d.config(text = 'Unosite tačke klikovima po platnu')
-      self.dugme_u.config(text = 'Zaključi unos')
+      self.meni.entryconfig(3, label = 'Zaključi unos')
       
       # Brisanje platna i reinicijalizacija liste tačaka
       self.obriši_platno()
