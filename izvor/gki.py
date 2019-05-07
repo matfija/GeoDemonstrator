@@ -46,6 +46,9 @@ class GeoDemonstrator(Tk):
     # Transformacija
     self.tr = ''
     
+    # Indikator inverzne transformacije
+    self.inv = 0
+    
     # Inicijalizacija liste identifikatora
     # na platnu trenutno iscrtanih tačaka
     self.id_tač = []
@@ -79,7 +82,7 @@ class GeoDemonstrator(Tk):
     
     # Kontrola unosa tačaka
     self.init_unos()
-  
+      
   # Inicijalizacija glavnog menija
   def init_meni(self):
     # Postavljanje glavnog menija i vezivanje
@@ -152,11 +155,22 @@ class GeoDemonstrator(Tk):
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
             return
-        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
+        if self.inv == 0:
+            u = float(self.ugao.get())
+        else:
+            u = - float(self.ugao.get())
+            
+        self.odabrana_transformacija = (self.funkcije[self.tr])(u)
+
       elif self.tr == 'rotacija':
           centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
                          sum(map(ig(1), t))/len(t))
-          u = float(self.ugao.get())
+          
+          # Ukoliko je odabrana inverzna transformacija
+          if self.inv == 0:
+            u = float(self.ugao.get())
+          else:
+            u = - float(self.ugao.get())
           
           if self.nacin_rotacije == 'oko centra mase':
             t1, t2 = centar_mase(self.ttačke)
@@ -165,9 +179,14 @@ class GeoDemonstrator(Tk):
             # Greska ako nisu uneti x i y
                 messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
                 return
-            t1 = float(self.x_koord.get())
-            t2 = float(self.y_koord.get())
-          
+            # Ukoliko je odabrana inverzna transformacija
+            if self.inv == 0:
+                t1 = float(self.x_koord.get())
+                t2 = float(self.y_koord.get())
+            else:
+                t1 = - float(self.x_koord.get())
+                t2 = - float(self.y_koord.get())
+                
           self.odabrana_transformacija = Trans(t1,t2)*(self.funkcije[self.tr])(u)*Trans(-t1,-t2)
     
       else:
@@ -175,7 +194,14 @@ class GeoDemonstrator(Tk):
             # Greska ako nisu uneti x i y
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
             return
-        self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
+        # Ukoliko je odabrana inverzna transformacija
+        if self.inv == 0:
+            t1 = float(self.x_koord.get())
+            t2 = float(self.y_koord.get())
+        else:
+            t1 = - float(self.x_koord.get())
+            t2 = - float(self.y_koord.get())
+        self.odabrana_transformacija = (self.funkcije[self.tr])(t1,t2)
       
       '''
       Ako je potrebno stampati vrednosti: 
@@ -241,7 +267,7 @@ class GeoDemonstrator(Tk):
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
                               padx = 5, pady = 5)
-    self.okvir_t.place(x = 25, y = 337,
+    self.okvir_t.place(x = 20, y = 337,
                        height = 95, width = 170)
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
@@ -269,9 +295,9 @@ class GeoDemonstrator(Tk):
     ugao_labela = Label(self, text = u"\u03B8:") 
     
     # Promena pozicije elemenata
-    x_koord_labela.place(x = 220, y = 348)
-    y_koord_labela.place(x = 220, y = 375)
-    ugao_labela.place(x = 220, y = 403)
+    x_koord_labela.place(x = 200, y = 348)
+    y_koord_labela.place(x = 200, y = 375)
+    ugao_labela.place(x = 200, y = 403)
     
     # Polja za unos vrednosti transformacija
     self.x_koord = Entry(self)
@@ -280,22 +306,37 @@ class GeoDemonstrator(Tk):
     
     # Opcija za postavljanje elemenata u tabloliku strukturu
     self.x_koord.grid(row = 0, column = 1)
-    self.y_koord.grid(row = 1, column = 1)
+    self.y_koord.grid(row = 1, column = 1) 
+    
+    # Promena pozicije elemenata
+    self.x_koord.place(x = 215, y = 348)
+    self.y_koord.place(x = 215, y = 375)
+    self.ugao.place(x = 215, y = 403)
     
     # Konfiguracija elemenata, postavljanje sirine polja za unos parametara
     self.x_koord.config(width = 5)
     self.y_koord.config(width = 5)
     self.ugao.config(width = 5)
-    
-    # Promena pozicije elemenata
-    self.x_koord.place(x = 240, y = 348)
-    self.y_koord.place(x = 240, y = 375)
-    self.ugao.place(x = 240, y = 403)
-    
+       
     self.odabir_rotacije()
+    self.inverz()
     
     self.mainloop()
     
+  def inverz(self):
+      
+    def odaberi_inverz(*args):
+        self.inv = int(var.get())
+        if self.inv == 1:
+            print('Odabrali ste inverznu transformaciju.')
+        
+    var = IntVar()
+    var.trace('w', odaberi_inverz)
+    
+    self.inverz = Checkbutton(self, text = 'Inverz',
+                              variable = var, command = None)
+    self.inverz.place(x = 300, y = 410)    
+        
   def zabrana_pristupa(self):
         self.x_koord.delete(0,END)
         self.x_koord.configure(state = 'disabled')
@@ -327,10 +368,10 @@ class GeoDemonstrator(Tk):
     var.trace('w', unos_rotacije)
     
     odabir_rotacije = Label(self, 
-        text = '''Izaberite rotaciju''',
+        text = '''Način rotacije''',
         justify = CENTER,
         padx = 10)
-    odabir_rotacije.place(x = 300, y = 340)
+    odabir_rotacije.place(x = 290, y = 326)
     self.radio1 = Radiobutton(self, 
               text="oko koord. početka",
               padx = 3, 
@@ -338,7 +379,7 @@ class GeoDemonstrator(Tk):
               value= 'oko koordinatnog pocetka',
               command = rot_promena)
     self.radio1.grid(row=0, column = 0)
-    self.radio1.place(x = 290, y = 365)
+    self.radio1.place(x = 270, y = 345)
     
     self.radio2 = Radiobutton(self, 
               text="oko centra mase",
@@ -347,7 +388,7 @@ class GeoDemonstrator(Tk):
               value= 'oko centra mase',
               command = rot_promena)
     self.radio2.grid(row=1, column = 0)
-    self.radio2.place(x = 290, y = 385)
+    self.radio2.place(x = 270, y = 365)
     
     self.radio3 = Radiobutton(self, 
               text="oko tačke",
@@ -356,14 +397,12 @@ class GeoDemonstrator(Tk):
               value= 'oko tacke',
               command = rot_promena)
     self.radio3.grid(row=1, column = 0)
-    self.radio3.place(x = 290, y = 405)
+    self.radio3.place(x = 270, y = 385)
     
     self.radio1.configure(state = DISABLED)
     self.radio2.configure(state = DISABLED)
     self.radio3.configure(state = DISABLED)
-        
-    self.mainloop()
-    
+            
   # Okvir za magični svet transformacija
   def init_unos(self):
     # Pravljenje okvira za dugmad
