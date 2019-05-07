@@ -193,8 +193,8 @@ class GeoDemonstrator(Tk):
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
                               padx = 5, pady = 5)
-    self.okvir_t.place(x = 150, y = 337,
-                       height = 91, width = 170)
+    self.okvir_t.place(x = 40, y = 337,
+                       height = 95, width = 170)
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
     # pozivamo odgovarajucu funkciju transformacije
@@ -221,9 +221,9 @@ class GeoDemonstrator(Tk):
     ugao_labela = Label(self, text = u"\u03B8:") 
     
     # Promena pozicije elemenata
-    x_koord_labela.place(x = 325, y = 345)
-    y_koord_labela.place(x = 325, y = 370)
-    ugao_labela.place(x = 325, y = 395)
+    x_koord_labela.place(x = 220, y = 348)
+    y_koord_labela.place(x = 220, y = 375)
+    ugao_labela.place(x = 220, y = 403)
     
     # Polja za unos vrednosti transformacija
     self.x_koord = Entry(self)
@@ -240,9 +240,9 @@ class GeoDemonstrator(Tk):
     self.ugao.config(width = 5)
     
     # Promena pozicije elemenata
-    self.x_koord.place(x = 345, y = 345)
-    self.y_koord.place(x = 345, y = 370)
-    self.ugao.place(x = 345, y = 395)
+    self.x_koord.place(x = 245, y = 348)
+    self.y_koord.place(x = 245, y = 375)
+    self.ugao.place(x = 245, y = 403)
     
     self.mainloop()
   
@@ -252,7 +252,7 @@ class GeoDemonstrator(Tk):
     self.okvir_d = LabelFrame(self, text = 'Unosite tačke klikovima'
                                ' po platnu', padx = 10, pady = 10)
     self.okvir_d.place(x = 10, y = 315,
-                       height = 120, width = 430)
+                       height = 128, width = 430)
     
     self.tranformacije()
     
