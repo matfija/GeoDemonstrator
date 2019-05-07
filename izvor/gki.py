@@ -129,12 +129,18 @@ class GeoDemonstrator(Tk):
       
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
-      if (self.tr == 'rotacija' or self.tr == 'refleksija'): #and self.nacin_rotacije == 1:
+      if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka') or self.tr == 'refleksija':
         # Greska ako nije unet ugao
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
-      #elif (self.tr == 'rotacija' and self.)
+      elif (self.tr == 'rotacija' and self.nacin_rotacije == 'oko centra mase'):
+          centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
+                         sum(map(ig(1), t))/len(t))
+          t1, t2 = centar_mase(self.ttačke)
+          u = float(self.ugao.get())
+          self.odabrana_transformacija = Trans(t1,t2)*(self.funkcije[self.tr])(u)*Trans(-t1,-t2)
+    
       else:
         if self.x_koord.get() == '' or self.x_koord.get() == '':
             # Greska ako nisu uneti x i y
@@ -245,21 +251,20 @@ class GeoDemonstrator(Tk):
     self.y_koord.place(x = 240, y = 375)
     self.ugao.place(x = 240, y = 403)
     
-    self.centar_mase()
+    self.odabir_rotacije()
     
     self.mainloop()
     
   
     
   # Odabir nacina rotacije
-  def centar_mase(self):
+  def odabir_rotacije(self):
     #self.okvir_c = LabelFrame(self.okvir_d, text = 'Izaberite način rotacije', 
                               #padx = 5, pady = 5)
     #self.okvir_c.place(x = 350, y = 337,
                        #height = 95, width = 170)
     
     def unos_rotacije(*args):
-        #print(var.get())
         self.nacin_rotacije = var.get()
                 
     var = StringVar()
@@ -294,11 +299,7 @@ class GeoDemonstrator(Tk):
               value= 'oko tacke')
     radio3.grid(row=1, column = 0)
     radio3.place(x = 290, y = 405)
-    
-    centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
-                         sum(map(ig(1), t))/len(t))
-    
-    
+        
     self.mainloop()
     
   # Okvir za magični svet transformacija
