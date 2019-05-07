@@ -198,6 +198,9 @@ class GeoDemonstrator(Tk):
         if self.inv == 0:
             t1 = float(self.x_koord.get())
             t2 = float(self.y_koord.get())
+        elif self.tr == 'skaliranje':
+            t1 = 1 / float(self.x_koord.get())
+            t2 = 1 / float(self.y_koord.get())
         else:
             t1 = - float(self.x_koord.get())
             t2 = - float(self.y_koord.get())
