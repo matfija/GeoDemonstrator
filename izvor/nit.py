@@ -4,13 +4,14 @@
 from threading import Thread
 
 # NAPOMENA: prava konkurentnost u Pajtonu postiže se
-# multiprocesiranjem;= naime, najčešća implementacija
+# multiprocesiranjem; naime, najčešća implementacija
 # Pajtona (C-ovski CPython) radi tako što glavna nit
 # takom rada drži interpretator zaključanim; na taj
 # način je optimizovano izvršavanje jednonitnih programa,
 # ali zato ne postoji ubrzanje ukoliko se koristi više
-# niti; program je čak i sportiji, što i nije neobično
-# sa obzirom na cenu pravljenja niti i promene konteksta
+# niti; program je čak i sporiji, što i nije neobično,
+# sa obzirom na cenu pravljenja niti i promene konteksta;
+# za više info istražiti global interpreter lock (GIL)
 # from multiprocessing import Process as Thread
 # from multiprocessing import Pool
 
