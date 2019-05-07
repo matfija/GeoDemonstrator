@@ -20,7 +20,7 @@ from omot import konveksni_omot
 from functools import partial
 
 # Uključivanje modula sa operatorima
-from operator import mul
+from operator import mul, itemgetter as ig
 
 # Uključivanje geometrijskog modula
 from geom import *
@@ -129,11 +129,12 @@ class GeoDemonstrator(Tk):
       
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
-      if self.tr == 'rotacija' or self.tr == 'refleksija':
+      if (self.tr == 'rotacija' or self.tr == 'refleksija'): #and self.nacin_rotacije == 1:
         # Greska ako nije unet ugao
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
+      #elif (self.tr == 'rotacija' and self.)
       else:
         if self.x_koord.get() == '' or self.x_koord.get() == '':
             # Greska ako nisu uneti x i y
@@ -248,21 +249,22 @@ class GeoDemonstrator(Tk):
     
     self.mainloop()
     
+  
+    
   # Odabir nacina rotacije
   def centar_mase(self):
     #self.okvir_c = LabelFrame(self.okvir_d, text = 'Izaberite način rotacije', 
                               #padx = 5, pady = 5)
     #self.okvir_c.place(x = 350, y = 337,
                        #height = 95, width = 170)
-    #self.var = IntVar()
-    #self.proveri = Checkbutton(
-            #self, text = '''Rotacija oko centra mase''',
-            #justify = CENTER,
-            #variable = self.var,
-            #command = None)
-    #self.proveri.place(x = 350, y = 350)
     
-    v = IntVar()
+    def unos_rotacije(*args):
+        #print(var.get())
+        self.nacin_rotacije = var.get()
+                
+    var = StringVar()
+    var.set('oko koordinatnog pocetka')
+    var.trace('w', unos_rotacije)
     
     odabir_rotacije = Label(self, 
         text = '''Izaberite rotaciju''',
@@ -270,24 +272,35 @@ class GeoDemonstrator(Tk):
         padx = 10)
     odabir_rotacije.place(x = 300, y = 340)
     radio1 = Radiobutton(self, 
+              text="oko koord. početka",
+              padx = 3, 
+              variable=var, 
+              value= 'oko koordinatnog pocetka')
+    radio1.grid(row=0, column = 0)
+    radio1.place(x = 290, y = 365)
+    
+    radio2 = Radiobutton(self, 
               text="oko centra mase",
               padx = 3, 
-              variable=v, 
-              value=1)
-    radio1.grid(row=0, column = 0)
-    radio1.place(x = 290, y = 370)
-    radio2 = Radiobutton(self, 
+              variable=var, 
+              value= 'oko centra mase')
+    radio2.grid(row=1, column = 0)
+    radio2.place(x = 290, y = 385)
+    
+    radio3 = Radiobutton(self, 
               text="oko tačke",
               padx = 3, 
-              variable=v, 
-              value=2)
-    radio2.grid(row=1, column = 0)
-    radio2.place(x = 290, y = 390)
+              variable=var, 
+              value= 'oko tacke')
+    radio3.grid(row=1, column = 0)
+    radio3.place(x = 290, y = 405)
+    
+    centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
+                         sum(map(ig(1), t))/len(t))
     
     
-
     self.mainloop()
-  
+    
   # Okvir za magični svet transformacija
   def init_unos(self):
     # Pravljenje okvira za dugmad
