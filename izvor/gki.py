@@ -127,8 +127,11 @@ class GeoDemonstrator(Tk):
       
       print ("Transformišem - {}!". format(self.tr))
       
-      if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka'):
-            messagebox.showerror('Greška', 'Izaberite način rotacije!')
+      if (self.tr == 'rotacija' and self.nacin_rotacije == '' and self.ugao.get() == ''):
+          messagebox.showerror('Greška', 'Izaberite ugao i način rotacije!')
+      elif (self.tr == 'rotacija' and self.nacin_rotacije == ''):
+          messagebox.showerror('Greška', 'Izaberite način rotacije!')
+          
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
       if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka') or self.tr == 'refleksija':
@@ -337,6 +340,10 @@ class GeoDemonstrator(Tk):
               command = rot_promena)
     self.radio3.grid(row=1, column = 0)
     self.radio3.place(x = 290, y = 405)
+    
+    self.radio1.configure(state = DISABLED)
+    self.radio2.configure(state = DISABLED)
+    self.radio3.configure(state = DISABLED)
         
     self.mainloop()
     
