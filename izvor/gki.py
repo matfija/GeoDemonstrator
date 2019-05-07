@@ -43,6 +43,9 @@ class GeoDemonstrator(Tk):
     self.tačke = []
     self.ttačke = []
     
+    # Transformacija
+    self.tr = ''
+    
     # Inicijalizacija liste identifikatora
     # na platnu trenutno iscrtanih tačaka
     self.id_tač = []
@@ -127,10 +130,20 @@ class GeoDemonstrator(Tk):
       
       print ("Transformišem - {}!". format(self.tr))
       
+      if self.ttačke == []:
+          messagebox.showerror('Greška', 'Unesite tačke na platno!')
+          return
+      
+      if self.tr == '':
+          messagebox.showerror('Greška', 'Izaberite transformaciju!')
+          return
+      
       if (self.tr == 'rotacija' and self.nacin_rotacije == '' and self.ugao.get() == ''):
           messagebox.showerror('Greška', 'Izaberite ugao i način rotacije!')
+          return
       elif (self.tr == 'rotacija' and self.nacin_rotacije == ''):
           messagebox.showerror('Greška', 'Izaberite način rotacije!')
+          return
           
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
@@ -138,6 +151,7 @@ class GeoDemonstrator(Tk):
         # Greska ako nije unet ugao
         if self.ugao.get() == '':
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+            return
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.ugao.get()))
       elif self.tr == 'rotacija':
           centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
@@ -150,6 +164,7 @@ class GeoDemonstrator(Tk):
             if self.x_koord.get() == '' or self.x_koord.get() == '':
             # Greska ako nisu uneti x i y
                 messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+                return
             t1 = float(self.x_koord.get())
             t2 = float(self.y_koord.get())
           
@@ -159,6 +174,7 @@ class GeoDemonstrator(Tk):
         if self.x_koord.get() == '' or self.x_koord.get() == '':
             # Greska ako nisu uneti x i y
             messagebox.showerror('Greška', 'Unesite parametre tranformacije!')
+            return
         self.odabrana_transformacija = (self.funkcije[self.tr])(float(self.x_koord.get()), float(self.y_koord.get()))
       
       '''
@@ -174,6 +190,7 @@ class GeoDemonstrator(Tk):
       if any(map(lambda t: t[0] < -29 or t[1] < -19 or
                        t[0] > 29 or t[1] > 19, nttacke)):
         messagebox.showerror('Greška', 'Neuspela transformacija!')
+        return
       else:
         # U slucaju da je korektno, iscrtava se transformisan poligon
         # ttacke -> lista tacaka u koordinatnom sistemu sa slike
