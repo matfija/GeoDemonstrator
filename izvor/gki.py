@@ -193,7 +193,7 @@ class GeoDemonstrator(Tk):
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
                               padx = 5, pady = 5)
-    self.okvir_t.place(x = 40, y = 337,
+    self.okvir_t.place(x = 25, y = 337,
                        height = 95, width = 170)
 
     # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
@@ -240,10 +240,52 @@ class GeoDemonstrator(Tk):
     self.ugao.config(width = 5)
     
     # Promena pozicije elemenata
-    self.x_koord.place(x = 245, y = 348)
-    self.y_koord.place(x = 245, y = 375)
-    self.ugao.place(x = 245, y = 403)
+    self.x_koord.place(x = 240, y = 348)
+    self.y_koord.place(x = 240, y = 375)
+    self.ugao.place(x = 240, y = 403)
     
+    self.centar_mase()
+    
+    self.mainloop()
+    
+  # Odabir nacina rotacije
+  def centar_mase(self):
+    #self.okvir_c = LabelFrame(self.okvir_d, text = 'Izaberite način rotacije', 
+                              #padx = 5, pady = 5)
+    #self.okvir_c.place(x = 350, y = 337,
+                       #height = 95, width = 170)
+    #self.var = IntVar()
+    #self.proveri = Checkbutton(
+            #self, text = '''Rotacija oko centra mase''',
+            #justify = CENTER,
+            #variable = self.var,
+            #command = None)
+    #self.proveri.place(x = 350, y = 350)
+    
+    v = IntVar()
+    
+    odabir_rotacije = Label(self, 
+        text = '''Izaberite rotaciju''',
+        justify = CENTER,
+        padx = 10)
+    odabir_rotacije.place(x = 300, y = 340)
+    radio1 = Radiobutton(self, 
+              text="oko centra mase",
+              padx = 3, 
+              variable=v, 
+              value=1)
+    radio1.grid(row=0, column = 0)
+    radio1.place(x = 290, y = 370)
+    radio2 = Radiobutton(self, 
+              text="oko tačke",
+              padx = 3, 
+              variable=v, 
+              value=2)
+    radio2.grid(row=1, column = 0)
+    radio2.place(x = 290, y = 390)
+    
+    
+
     self.mainloop()
   
   # Okvir za magični svet transformacija
