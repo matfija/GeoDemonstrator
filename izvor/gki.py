@@ -127,6 +127,8 @@ class GeoDemonstrator(Tk):
       
       print ("Transformišem - {}!". format(self.tr))
       
+      if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka'):
+            messagebox.showerror('Greška', 'Izaberite način rotacije!')
       # Preslikavanje stringa u odgovarajucu matricu transformacije
       # u zavisnosti od unetih parametara
       if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka') or self.tr == 'refleksija':
@@ -190,6 +192,20 @@ class GeoDemonstrator(Tk):
         # Citanje vrednosti odabrane transformacije iz padajuce liste
         self.tr = var.get()
         print("Odabrali ste: {}".format(str(self.tr)))
+        if self.tr != 'rotacija':
+            self.nacin_rotacije = ''
+            self.radio1.deselect()
+            self.radio2.deselect()
+            self.radio3.deselect()
+            
+            self.radio1.configure(state = DISABLED)
+            self.radio2.configure(state = DISABLED)
+            self.radio3.configure(state = DISABLED)
+        else:
+            self.radio1.configure(state = NORMAL)
+            self.radio2.configure(state = NORMAL)
+            self.radio3.configure(state = NORMAL)
+            
         
         # Dozvola i zabrana pristupa poljima za unos parametara 
         # u zavisnosti od odabrane transformacije
@@ -199,16 +215,8 @@ class GeoDemonstrator(Tk):
             # Brisanje unete vrednosti parametra
             self.ugao.delete(0,END)
             self.ugao.configure(state = 'disabled')
-        elif self.nacin_rotacije != 'oko tacke':
-            self.x_koord.delete(0,END)
-            self.x_koord.configure(state = 'disabled')
-            self.y_koord.delete(0,END)
-            self.y_koord.configure(state = 'disabled')
-            self.ugao.configure(state = 'normal')
         else:
-            self.x_koord.configure(state = 'normal')
-            self.y_koord.configure(state = 'normal')
-            self.ugao.configure(state = 'normal')
+            self.zabrana_pristupa()
         
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
@@ -268,10 +276,16 @@ class GeoDemonstrator(Tk):
     
     self.mainloop()
     
-  
-    
+  def zabrana_pristupa(self):
+        self.x_koord.delete(0,END)
+        self.x_koord.configure(state = 'disabled')
+        self.y_koord.delete(0,END)
+        self.y_koord.configure(state = 'disabled')
+        self.ugao.configure(state = 'normal')
+        
   # Odabir nacina rotacije
   def odabir_rotacije(self):
+        
     #self.okvir_c = LabelFrame(self.okvir_d, text = 'Izaberite način rotacije', 
                               #padx = 5, pady = 5)
     #self.okvir_c.place(x = 350, y = 337,
@@ -279,9 +293,17 @@ class GeoDemonstrator(Tk):
     
     def unos_rotacije(*args):
         self.nacin_rotacije = var.get()
-                
+        
+    def rot_promena(*args):
+        if self.nacin_rotacije != 'oko tacke':
+            self.zabrana_pristupa()
+        else:
+            self.x_koord.configure(state = 'normal')
+            self.y_koord.configure(state = 'normal')
+            self.ugao.configure(state = 'normal')
+        
     var = StringVar()
-    var.set('oko koordinatnog pocetka')
+    self.nacin_rotacije = ''
     var.trace('w', unos_rotacije)
     
     odabir_rotacije = Label(self, 
@@ -289,29 +311,32 @@ class GeoDemonstrator(Tk):
         justify = CENTER,
         padx = 10)
     odabir_rotacije.place(x = 300, y = 340)
-    radio1 = Radiobutton(self, 
+    self.radio1 = Radiobutton(self, 
               text="oko koord. početka",
               padx = 3, 
               variable=var, 
-              value= 'oko koordinatnog pocetka')
-    radio1.grid(row=0, column = 0)
-    radio1.place(x = 290, y = 365)
+              value= 'oko koordinatnog pocetka',
+              command = rot_promena)
+    self.radio1.grid(row=0, column = 0)
+    self.radio1.place(x = 290, y = 365)
     
-    radio2 = Radiobutton(self, 
+    self.radio2 = Radiobutton(self, 
               text="oko centra mase",
               padx = 3, 
               variable=var, 
-              value= 'oko centra mase')
-    radio2.grid(row=1, column = 0)
-    radio2.place(x = 290, y = 385)
+              value= 'oko centra mase',
+              command = rot_promena)
+    self.radio2.grid(row=1, column = 0)
+    self.radio2.place(x = 290, y = 385)
     
-    radio3 = Radiobutton(self, 
+    self.radio3 = Radiobutton(self, 
               text="oko tačke",
               padx = 3, 
               variable=var, 
-              value= 'oko tacke')
-    radio3.grid(row=1, column = 0)
-    radio3.place(x = 290, y = 405)
+              value= 'oko tacke',
+              command = rot_promena)
+    self.radio3.grid(row=1, column = 0)
+    self.radio3.place(x = 290, y = 405)
         
     self.mainloop()
     
