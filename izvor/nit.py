@@ -11,7 +11,10 @@ from threading import Thread
 # ali zato ne postoji ubrzanje ukoliko se koristi više
 # niti; program je čak i sporiji, što i nije neobično,
 # sa obzirom na cenu pravljenja niti i promene konteksta;
-# za više info istražiti global interpreter lock (GIL)
+# za više info istražiti global interpreter lock (GIL);
+# autori seminarskog su, međutim, multiprocesiranjem
+# dobili još lošije rezultate, tako da je ono ostalo
+# zakomentarisano, a program radi pravljenem niti
 # from multiprocessing import Process as Thread
 # from multiprocessing import Pool
 

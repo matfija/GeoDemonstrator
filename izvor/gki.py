@@ -89,13 +89,20 @@ class GeoDemonstrator(Tk):
       
   # Inicijalizacija glavnog menija
   def init_meni(self):
+    # Pravljenje glavnog menija
+    self.meni = Menu(self)
+    
+    # Postavljanje sporednog padajućeg menija
+    self.umeni = Menu(self.meni)
+    self.umeni.add_command(label = 'Zaključi unos',
+                           command = self.promena_unosa)
+    self.umeni.add_command(label = 'Ispravi figuru',
+                           command = self.ispravi)
+    self.umeni.add_command(label = 'Očisti platno',
+                           command = self.novo_platno)
+    
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
-    self.meni = Menu(self)
-    self.umeni = Menu(self.meni)
-    self.umeni.add_command(label = 'Zaključi unos', command = self.promena_unosa)
-    self.umeni.add_command(label = 'Ispravi figuru', command = self.ispravi)
-    self.umeni.add_command(label = 'Očisti platno', command = self.novo_platno)
     self.meni.add_cascade(label = 'Opcije', menu = self.umeni)
     self.meni.add_command(label = 'Info (F1)', command = self.info)
     self.meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
@@ -132,7 +139,8 @@ class GeoDemonstrator(Tk):
     self.unos = True
     self.platno.bind('<Button-1>', self.dodaj_tačku)
   
-  # Funkcija za dohvatanje vrednosti promenljive
+  # Funkcija za dohvatanje vrednosti promenljive; pokušava
+  # se evaluacija vrednosti ili ispaljuje izuzetak
   def uzmi_prom(self, prom):
     try:
       if prom == 'x':
@@ -146,150 +154,169 @@ class GeoDemonstrator(Tk):
       return float('nan')
   
   # Funkcija za transformisanje kreiranog poligona
-  def transformisi(self, *args):
-      
-      print ("Transformišem - {}!". format(self.tr))
-      
-      if self.ttačke == []:
-          showerror('Greška', 'Unesite tačke na platno!')
-          return
-      
-      if self.tr == '':
-          showerror('Greška', 'Izaberite transformaciju!')
-          return
-      
-      if (self.tr == 'rotacija' and self.nacin_rotacije == '' and self.ugao.get() == ''):
-          showerror('Greška', 'Izaberite ugao i način rotacije!')
-          return
-      elif (self.tr == 'rotacija' and self.nacin_rotacije == ''):
-          showerror('Greška', 'Izaberite način rotacije!')
-          return
-      
-      # Preslikavanje stringa u odgovarajucu matricu transformacije
-      # u zavisnosti od unetih parametara
-      if (self.tr == 'rotacija' and self.nacin_rotacije == 'oko koordinatnog pocetka') or self.tr == 'refleksija':
-        # Greska ako nije unet ugao
-        if self.ugao.get() == '':
-            showerror('Greška', 'Unesite parametre tranformacije!')
-            return
-        if self.inv == 0:
-            u = self.uzmi_prom('u')
-        else:
-            u = -self.uzmi_prom('u')
-        
-        if isnan(u): return
-        
-        self.odabrana_transformacija = (self.funkcije[self.tr])(u)
-
-      elif self.tr == 'rotacija':
-          centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
-                                   sum(map(ig(1), t))/len(t))
-          
-          # Ukoliko je odabrana inverzna transformacija
-          if self.inv == 0:
-            u = self.uzmi_prom('u')
-          else:
-            u = -self.uzmi_prom('u')
-          
-          if isnan(u): return
-          
-          if self.nacin_rotacije == 'oko centra mase':
-            t1, t2 = centar_mase(self.ttačke)
-          elif self.nacin_rotacije == 'oko tacke':
-            if self.x_koord.get() == '' or self.x_koord.get() == '':
-            # Greska ako nisu uneti x i y
-                showerror('Greška', 'Unesite parametre tranformacije!')
-                return
-            # Ukoliko je odabrana inverzna transformacija
-            if self.inv == 0:
-                t1 = self.uzmi_prom('x')
-                if isnan(t1): return
-                t2 = self.uzmi_prom('y')
-            else:
-                t1 = -self.uzmi_prom('x')
-                if isnan(t1): return
-                t2 = -self.uzmi_prom('y')
-          
-          if isnan(t2): return
-          
-          self.odabrana_transformacija = (self.funkcije[self.tr])(u, t1, t2)
+  def transformiši(self):
+    # Nije moguće transformisati prazan skup tačaka
+    if not self.ttačke:
+      showerror('Greška', 'Unesite tačke na platno!')
+      return
     
-      else:
-        if self.x_koord.get() == '' or self.x_koord.get() == '':
-            # Greska ako nisu uneti x i y
-            showerror('Greška', 'Unesite parametre tranformacije!')
-            return
-        # Ukoliko je odabrana inverzna transformacija
-        if self.inv == 0:
-            t1 = self.uzmi_prom('x')
-            if isnan(t1): return
-            t2 = self.uzmi_prom('y')
-        elif self.tr == 'skaliranje':
-            t1 = 1/self.uzmi_prom('x')
-            if isnan(t1): return
-            t2 = 1/self.uzmi_prom('y')
-        else:
-            t1 = -self.uzmi_prom('x')
-            if isnan(t1): return
-            t2 = -self.uzmi_prom('y')
-        
-        if isnan(t2): return
-        
-        self.odabrana_transformacija = (self.funkcije[self.tr])(t1,t2)
-      
-      # Nove transformisane tacke sa vrednostima koordinatnom sistemu sa slike
-      nttacke = list(map(partial(mul, self.odabrana_transformacija), self.ttačke))
-      
-      # Provera da nisu tacke otisle van koordinatnog sistema sa slike tj. platna
-      if any(map(lambda t: t[0] < -29 or t[1] < -19 or
-                       t[0] > 29 or t[1] > 19, nttacke)):
-        showerror('Greška', 'Neuspela transformacija!')
+    # Neophodno je na transformacija bude odabrana
+    if not self.tr:
+      showerror('Greška', 'Izaberite transformaciju!')
+      return
+    
+    # Neophodno je odabrati sve parametre rotacije
+    if self.tr == 'rotacija' and \
+       not self.način_rotacije and \
+       not self.ugao.get():
+      showerror('Greška', 'Izaberite ugao i način rotacije!')
+      return
+    elif self.tr == 'rotacija' and not self.način_rotacije:
+      showerror('Greška', 'Izaberite način rotacije!')
+      return
+    
+    # Preslikavanje stringa u odgovarajuću matricu
+    # transformacije u zavisnosti od unetih parametara
+    if self.tr == 'rotacija' and \
+       self.način_rotacije == 'oko koordinatnog početka' or \
+       self.tr == 'refleksija':
+      # Greška ako nije unet ugao
+      if not self.ugao.get():
+        showerror('Greška', 'Unesite parametre tranformacije!')
         return
+      
+      # Izračunavanje parametra transformacije
+      if self.inv == 0:
+        u = self.uzmi_prom('u')
       else:
-        # U slucaju da je korektno, iscrtava se transformisan poligon
-        # ttacke -> lista tacaka u koordinatnom sistemu sa slike
-        # tacke -> lista tacaka u koordinatnom sistemu platna
-        self.ttačke = nttacke
-        self.tačke = list(map(partial(mul, self.kup), self.ttačke))
-        self.nacrtaj_figuru()
+        u = -self.uzmi_prom('u')
+      
+      # Propagacija greške u izračunavanju
+      if isnan(u): return
+      
+      self.odabrana_transformacija = (self.funkcije[self.tr])(u)
+      
+    # Obrada rotacije oko tačke
+    elif self.tr == 'rotacija':
+      centar_mase = lambda t: (sum(map(ig(0), t))/len(t),
+                               sum(map(ig(1), t))/len(t))
+      
+      # Ukoliko je odabrana inverzna transformacija
+      if self.inv == 0:
+        u = self.uzmi_prom('u')
+      else:
+        u = -self.uzmi_prom('u')
+      
+      # Propagacija greške u izračunavanju
+      if isnan(u): return
+      
+      if self.način_rotacije == 'oko centra mase':
+        # Računanje centra mase
+        t1, t2 = centar_mase(self.ttačke)
+      elif self.način_rotacije == 'oko tačke':
+        if not self.x_koord.get() or not self.x_koord.get():
+          # Greška ako nisu uneti x i y
+          showerror('Greška', 'Unesite parametre transformacije!')
+          return
+        
+        # Izračunavanje parametra transformacije
+        # i eventualna propagacija greške u računu
+        t1 = self.uzmi_prom('x')
+        if isnan(t1): return
+        t2 = self.uzmi_prom('y')
+        if isnan(t2): return
+      
+      self.odabrana_transformacija = (self.funkcije[self.tr])(u, t1, t2)
+    
+    else:
+      if not self.x_koord.get() or not self.y_koord.get():
+        # Greška ako nisu uneti x i y
+        showerror('Greška', 'Unesite parametre tranformacije!')
+        return
+      
+      # Izračunavanje parametra transformacije
+      if self.inv == 0:
+        t1 = self.uzmi_prom('x')
+        if isnan(t1): return
+        t2 = self.uzmi_prom('y')
+      elif self.tr == 'skaliranje':
+        t1 = 1/self.uzmi_prom('x')
+        if isnan(t1): return
+        t2 = 1/self.uzmi_prom('y')
+      else:
+        t1 = -self.uzmi_prom('x')
+        if isnan(t1): return
+        t2 = -self.uzmi_prom('y')
+      
+      # Propagacija greške u izračunavanju
+      if isnan(t2): return
+      
+      self.odabrana_transformacija = (self.funkcije[self.tr])(t1,t2)
+
+    # Nove transformisane tačke u
+    # koordinatnom sistemu sa slike
+    nttačke = list(map(partial(mul,
+              self.odabrana_transformacija),
+                      self.ttačke))
+    
+    # Provera da li su tačke otišle van koordinatnog
+    # sistema sa slike tj. vidljivog dela platna
+    if any(map(lambda t: t[0] < -29 or t[1] < -19 or
+                     t[0] > 29 or t[1] > 19, nttačke)):
+      showerror('Greška', 'Neuspela transformacija!')
+      return
+    else:
+      # U slucaju da je korektno, iscrtava se transformisan poligon
+      # ttačke -> lista tačaka u koordinatnom sistemu sa slike
+      # tačke -> lista tačaka u koordinatnom sistemu platna
+      print ("Izvršena transformacija: {}!". format(self.tr))
+      self.ttačke = nttačke
+      self.tačke = list(map(partial(mul, self.kup), self.ttačke))
+      self.nacrtaj_figuru()
       
   # Transformacijski okvir
   def tranformacije(self):
-    # Mapa za preslikavanje stringa u odgavarajucu matricu transformacije
-    self.funkcije = {'translacija': Trans, 'skaliranje': Skal, 
-                     'smicanje': Smic, 'rotacija': Rot,
+    # Mapa za preslikavanje stringa u
+    # odgavarajuću matricu transformacije
+    self.funkcije = {'translacija': Trans,
+                     'skaliranje': Skal, 
+                     'smicanje': Smic,
+                     'rotacija': Rot,
                      'refleksija': Refl}
-      
+    
     def unos_transformacije(*args):
-        print("Uneli ste novu transformaciju!")
-        # Citanje vrednosti odabrane transformacije iz padajuce liste
-        self.tr = var.get()
-        print("Odabrali ste: {}".format(str(self.tr)))
-        if self.tr != 'rotacija':
-            self.nacin_rotacije = ''
-            self.radio1.deselect()
-            self.radio2.deselect()
-            self.radio3.deselect()
-            
-            self.radio1.configure(state = 'disabled')
-            self.radio2.configure(state = 'disabled')
-            self.radio3.configure(state = 'disabled')
-        else:
-            self.radio1.configure(state = 'normal')
-            self.radio2.configure(state = 'normal')
-            self.radio3.configure(state = 'normal')
-            
+      # Čitanje vrednosti odabrane transformacije
+      self.tr = var.get()
+      print("Odabrana transformacija: {}".format(self.tr))
+      
+      # Promena stanja dugmića u odnosu na odabir
+      if self.tr != 'rotacija':
+        self.način_rotacije = ''
+        self.radio1.deselect()
+        self.radio2.deselect()
+        self.radio3.deselect()
         
-        # Dozvola i zabrana pristupa poljima za unos parametara 
-        # u zavisnosti od odabrane transformacije
-        if self.tr == 'translacija' or self.tr == 'smicanje' or self.tr == 'skaliranje':
-            self.x_koord.configure(state = 'normal')
-            self.y_koord.configure(state = 'normal')
-            # Brisanje unete vrednosti parametra
-            self.ugao.delete(0, 'end')
-            self.ugao.configure(state = 'disabled')
-        else:
-            self.zabrana_pristupa()
+        self.radio1.configure(state = 'disabled')
+        self.radio2.configure(state = 'disabled')
+        self.radio3.configure(state = 'disabled')
+      else:
+        self.radio1.configure(state = 'normal')
+        self.radio2.configure(state = 'normal')
+        self.radio3.configure(state = 'normal')
+    
+      # Dozvola i zabrana pristupa poljima za unos parametara 
+      # u zavisnosti od odabrane transformacije
+      if self.tr == 'translacija' or \
+         self.tr == 'smicanje' or \
+         self.tr == 'skaliranje':
+        self.x_koord.configure(state = 'normal')
+        self.y_koord.configure(state = 'normal')
+        
+        # Brisanje unete vrednosti parametra
+        self.ugao.delete(0, 'end')
+        self.ugao.configure(state = 'disabled')
+      else:
+        self.zabrana_pristupa()
         
     # Pravljenje okvira za odabir transformacije
     self.okvir_t = LabelFrame(self, text = 'Izaberite transformaciju', 
@@ -297,14 +324,15 @@ class GeoDemonstrator(Tk):
     self.okvir_t.place(x = 20, y = 337,
                        height = 95, width = 170)
 
-    # U zavisnosti od vrednosti var koje procitamo iz padajuceg menija,
-    # pozivamo odgovarajucu funkciju transformacije
+    # U zavisnosti od vrednosti var koju pročitamo iz
+    # padajućeg menija, pozivamo odgovarajuću fju transformacije
     var = StringVar(self)
     var.set('                 ')
-    # Funkcija za pracenje promenljive
+    
+    # Funkcija za praćenje promenljive
     var.trace('w', unos_transformacije)
     
-    # Padajuca lista geometrijskih transformacija
+    # Padajuća lista geometrijskih transformacija
     self.option = OptionMenu(self.okvir_t, var, 
                              'translacija', 
                              'skaliranje', 
@@ -314,12 +342,12 @@ class GeoDemonstrator(Tk):
     
     # Postavljanje dugmeta za pokretanje transformacije
     dugme_t = Button(self.okvir_t, text = 'Transformiši', 
-                     command = self.transformisi).pack()
+                     command = self.transformiši).pack()
     
     # Naslovi parametara koje korisnik unosi
-    x_koord_labela = Label(self, text = 'x:') 
-    y_koord_labela = Label(self, text = 'y:') 
-    ugao_labela = Label(self, text = '\u03B8:') 
+    x_koord_labela = Label(self, text = 'x:')
+    y_koord_labela = Label(self, text = 'y:')
+    ugao_labela = Label(self, text = '\u03B8:')
     
     # Promena pozicije elemenata
     x_koord_labela.place(x = 200, y = 348)
@@ -336,85 +364,92 @@ class GeoDemonstrator(Tk):
     self.y_koord.place(x = 215, y = 375)
     self.ugao.place(x = 215, y = 403)
     
-    # Konfiguracija elemenata, postavljanje sirine polja za unos parametara
+    # Konfiguracija elemenata, postavljanje
+    # širine polja za unos parametara
     self.x_koord.config(width = 5)
     self.y_koord.config(width = 5)
     self.ugao.config(width = 5)
-       
+    
+    # Konfiguracija ostalih parametara
     self.odabir_rotacije()
     self.inverz()
-    
+  
+  # Funkcija za praćenje inverza
   def inverz(self):
-      
     def odaberi_inverz(*args):
-        self.inv = int(var.get())
-        if self.inv == 1:
-            print('Odabrali ste inverznu transformaciju.')
-        
+      self.inv = int(var.get())
+      if self.inv == 1:
+        print('Odabrana inverznu transformaciju.')
+    
     var = IntVar()
     var.trace('w', odaberi_inverz)
     
     self.inverz = Checkbutton(self, text = 'Inverz',
                               variable = var, command = None)
-    self.inverz.place(x = 300, y = 410)    
-        
+    self.inverz.place(x = 300, y = 410)
+  
+  # Kontrola pristupa poljima za unos
   def zabrana_pristupa(self):
-        self.x_koord.delete(0, 'end')
-        self.x_koord.configure(state = 'disabled')
-        self.y_koord.delete(0, 'end')
-        self.y_koord.configure(state = 'disabled')
-        self.ugao.configure(state = 'normal')
-        
-  # Odabir nacina rotacije
+    self.x_koord.delete(0, 'end')
+    self.x_koord.configure(state = 'disabled')
+    self.y_koord.delete(0, 'end')
+    self.y_koord.configure(state = 'disabled')
+    self.ugao.configure(state = 'normal')
+  
+  # Odabir načina rotacije
   def odabir_rotacije(self):
-        
     def unos_rotacije(*args):
-        self.nacin_rotacije = var.get()
-        
-    def rot_promena(*args):
-        if self.nacin_rotacije != 'oko tacke':
-            self.zabrana_pristupa()
-        else:
-            self.x_koord.configure(state = 'normal')
-            self.y_koord.configure(state = 'normal')
-            self.ugao.configure(state = 'normal')
-        
+      self.način_rotacije = var.get()
+    
+    # Kontrola pristupa poljima za rotaciju
+    def rot_promena():
+      if self.način_rotacije != 'oko tačke':
+        self.zabrana_pristupa()
+      else:
+        self.x_koord.configure(state = 'normal')
+        self.y_koord.configure(state = 'normal')
+        self.ugao.configure(state = 'normal')
+    
+    # Praćenje stanja rotacije
     var = StringVar()
-    self.nacin_rotacije = ''
+    self.način_rotacije = ''
     var.trace('w', unos_rotacije)
     
-    odabir_rotacije = Label(self, 
-        text = '''Način rotacije''',
+    # Oznaka za odabir načina rotacije
+    odabir_rotacije = Label(self,
+        text = 'Način rotacije',
         justify = 'center',
         padx = 10)
     odabir_rotacije.place(x = 290, y = 326)
-    self.radio1 = Radiobutton(self, 
-              text="oko koord. početka",
-              padx = 3, 
-              variable=var, 
-              value= 'oko koordinatnog pocetka',
+    
+    # Dugme za rotaciju oko tačke (0, 0)
+    self.radio1 = Radiobutton(self,
+              text= 'oko koord. početka',
+              padx = 3,
+              variable = var,
+              value = 'oko koordinatnog početka',
               command = rot_promena)
-    self.radio1.grid(row=0, column = 0)
     self.radio1.place(x = 270, y = 345)
     
+    # Dugme za rotaciju oko baricentra
     self.radio2 = Radiobutton(self, 
-              text="oko centra mase",
+              text = 'oko centra mase',
               padx = 3, 
-              variable=var, 
-              value= 'oko centra mase',
+              variable = var, 
+              value = 'oko centra mase',
               command = rot_promena)
-    self.radio2.grid(row=1, column = 0)
     self.radio2.place(x = 270, y = 365)
     
+    # Dugme za rotaciju oko unete tačke
     self.radio3 = Radiobutton(self, 
-              text="oko tačke",
+              text = 'oko tačke',
               padx = 3, 
               variable=var, 
-              value= 'oko tacke',
+              value= 'oko tačke',
               command = rot_promena)
-    self.radio3.grid(row=1, column = 0)
     self.radio3.place(x = 270, y = 385)
     
+    # Isprva su dugmad nepristupačna
     self.radio1.configure(state = 'disabled')
     self.radio2.configure(state = 'disabled')
     self.radio3.configure(state = 'disabled')
@@ -427,6 +462,7 @@ class GeoDemonstrator(Tk):
     self.okvir_d.place(x = 10, y = 315,
                        height = 128, width = 430)
     
+    # Inicijalizacija polja sa transformacijama
     self.tranformacije()
     
   # Dodavanje pritisnute tačke

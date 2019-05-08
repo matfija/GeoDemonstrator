@@ -253,11 +253,11 @@ class Tačka:
   def __trunc__(self):
     return Tačka(trunc(self[i]) for i in range(2))
   
-  # Zaokrugljivanje nagore
+  # Zaokrugljivanje naniže
   def __floor__(self):
     return Tačka(floor(self[i]) for i in range(2))
     
-  # Zaokrugljivanje nadole
+  # Zaokrugljivanje naviše
   def __ceil__(self):
     return Tačka(ceil(self[i]) for i in range(2))
     
