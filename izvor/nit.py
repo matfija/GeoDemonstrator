@@ -49,7 +49,7 @@ class StaraNit(Thread):
   # Prevazilaženje metoda za pokretanje niti
   def run(self):
     # Ukoliko postoji fja, rezultat je ono što vraća
-    if self._target:
+    if self._target is not None:
       self.rezultat = self._target(*self._args, **self._kwargs)
   
   # Prevazilaženje metoda za čekanje niti
