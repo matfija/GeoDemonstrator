@@ -10,13 +10,16 @@ from functools import partial, total_ordering
 # Uključivanje modula sa operatorima
 from operator import ne
 
+# Uključivanje modula za kopiranje
+from copy import deepcopy
+
 # Geometrijska transformacija ravni
 # predstavljena homogenom 3x3 matricom
 class Geom:
   # Ispitivanje da li je argument matrica
   def matrix(arg):
     if isinstance(arg, Geom):
-      return arg.mat
+      return deepcopy(arg.mat)
     
     # Mora biti objekat dimenzija 3x3
     if len(arg) is not 3 or any(map(partial(ne, 3), map(len, arg))):
@@ -28,17 +31,17 @@ class Geom:
   
   # Pomeranje transformacije u odnosu na tačku
   def pomereno(self, t, tp=None):
-    if t:
+    if t is not None:
       # Provera da li je t tačka
       try:
         t = Tačka.point(t)
         
         # Ako jeste, tp mora niti None
-        if tp:
+        if tp is not None:
           raise TypeError
         
         # Vraćanje odgovarajuće matrice
-        return (Trans(t[0], t[1]) * self * Trans(-t[0], -t[1])).mat
+        return Geom.matrix(Trans(t[0], t[1]) * self * Trans(-t[0], -t[1]))
       except:
         # Ako nije, onda je (t, tp) tačka
         if not isinstance(tp, (int, float)) \
@@ -46,16 +49,22 @@ class Geom:
           raise TypeError
         
         # Vraćanje odgovarajuće matrice
-        return (Trans(t, tp) * self * Trans(-t, -tp)).mat
-    elif tp:
+        return Geom.matrix(Trans(t, tp) * self * Trans(-t, -tp))
+    elif tp is not None:
       # Provera drugog argumenta
       return self.pomereno(tp)
     else:
       return self.mat
   
   # Konstruktor transformacije
-  def __init__(self, mat):
-    self.mat = Geom.matrix(mat)
+  def __init__(self, mat = None):
+    if mat is not None:
+      self.mat = Geom.matrix(mat)
+    else:
+      # Jedinična matrica ako nema posleđene
+      self.mat = ((1, 0, 0),
+                  (0, 1, 0),
+                  (0, 0, 1))
   
   # Uobičajeno množenje matrica ili, pak,
   # množenje matrice sa tačkom ravni
@@ -78,9 +87,7 @@ class Geom:
     if not isinstance(dr, int) or dr < 0:
       raise TypeError
     elif dr is 0:
-      return Geom(((1, 0, 0),
-                   (0, 1, 0),
-                   (0, 0, 1)))
+      return Geom()
     elif dr is 1:
       return Geom(self.mat)
     elif dr%2 is 0:
@@ -107,72 +114,106 @@ class Geom:
 
 # Translacija nasleđuje geom. trans.
 class Trans(Geom):
-  def __init__(self, x=0, y=0):
+  def __init__(self, x=0, y=0, inv=False):
     if not isinstance(x, (int, float)):
       self.mat = Geom.matrix(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
     else:
+      # Inverzna je aditivni inverz
+      if inv:
+        x = -x
+        y = -y
+      
+      # Matrica translacije u ravni
       self.mat = ((1, 0, x),
                   (0, 1, y),
                   (0, 0, 1))
 
 # Skaliranje nasleđuje geom. trans.
 class Skal(Geom):
-  def __init__(self, x=1, y=1, t=None, tp=None):
+  def __init__(self, x=1, y=1, t=None, tp=None, inv=False):
     if not isinstance(x, (int, float)):
       self.mat = Geom.matrix(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
     else:
+      # Inverzna je multiplikativni inverz
+      if inv:
+        x = 1/x
+        y = 1/y
+      
+      # Matrica istezanja u ravni
       self.mat = ((x, 0, 0),
                   (0, y, 0),
                   (0, 0, 1))
     
+    # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
 
 # Smicanje nasleđuje geom. trans.
 class Smic(Geom):
-  def __init__(self, x=0, y=0, t=None, tp=None):
+  def __init__(self, x=0, y=0, t=None, tp=None, inv=False):
     if not isinstance(x, (int, float)):
       self.mat = Geom.matrix(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
     else:
+      # Inverzna je aditivni inverz
+      if inv:
+        x = -x
+        y = -y
+      
+      # Matrica smicanja u ravni
       self.mat = ((1, x, 0),
                   (y, 1, 0),
                   (0, 0, 1))
     
+    # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
 
 # Rotacija nasleđuje geom. trans.
 class Rot(Geom):
-  def __init__(self, u=0, t=None, tp=None):
+  def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
       self.mat = Geom.matrix(u)
     else:
+      # Inverzna je aditivni inverz
+      if inv:
+        u = -u
+      
+      # Koeficijenti rotacije u ravni
       pom1 = cos(radians(u))
       pom2 = sin(radians(u))
       
+      # Matrica rotacije u ravni
       self.mat = ((pom1, -pom2,  0),
                   (pom2,  pom1,  0),
                   (0,      0,    1))
     
+    # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
 
 # Refleksija nasleđuje geom. trans.
 class Refl(Geom):
-  def __init__(self, u=0, t=None, tp=None):
+  def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
       self.mat = Geom.matrix(u)
     else:
+      # Svaka refleksija je samoj sebi inverzna
+      if inv:
+        pass
+      
+      # Koeficijenti refleksije u ravni
       pom1 = cos(radians(2*u))
       pom2 = sin(radians(2*u))
       
+      # Matrica refleksije u ravni
       self.mat = ((pom1,  pom2,  0),
                   (pom2, -pom1,  0),
                   (0,      0,    1))
     
+    # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
 
 # Tačka predstavljena koordinatama; funkcionalno
@@ -197,10 +238,14 @@ class Tačka:
   
   # Konsktruktor klase
   def __init__(self, x=0, y=0, w=1):
-    if isinstance(x, (int, float)):
+    if  isinstance(x, (int, float)) \
+    and isinstance(y, (int, float)) \
+    and isinstance(w, (int, float)):
       self.mat = (x/w, y/w, 1)
-    else:
+    elif y == 0 and w == 1:
       self.mat = Tačka.point(x)
+    else:
+      raise TypeError
   
   # Uobičajeno sabiranje dve tačke
   def __add__(self, dr):
