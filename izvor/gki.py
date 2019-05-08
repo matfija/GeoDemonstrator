@@ -160,7 +160,7 @@ class GeoDemonstrator(Tk):
       showerror('Greška', 'Unesite tačke na platno!')
       return
     
-    # Neophodno je na transformacija bude odabrana
+    # Neophodno je da transformacija bude odabrana
     if not self.tr:
       showerror('Greška', 'Izaberite transformaciju!')
       return
@@ -269,7 +269,7 @@ class GeoDemonstrator(Tk):
       # U slucaju da je korektno, iscrtava se transformisan poligon
       # ttačke -> lista tačaka u koordinatnom sistemu sa slike
       # tačke -> lista tačaka u koordinatnom sistemu platna
-      print ("Izvršena transformacija: {}!". format(self.tr))
+      print ('Izvršena transformacija: {}!'. format(self.tr))
       self.ttačke = nttačke
       self.tačke = list(map(partial(mul, self.kup), self.ttačke))
       self.nacrtaj_figuru()
@@ -287,7 +287,7 @@ class GeoDemonstrator(Tk):
     def unos_transformacije(*args):
       # Čitanje vrednosti odabrane transformacije
       self.tr = var.get()
-      print("Odabrana transformacija: {}".format(self.tr))
+      print('Odabrana transformacija: {}'.format(self.tr))
       
       # Promena stanja dugmića u odnosu na odabir
       if self.tr != 'rotacija':
@@ -325,7 +325,7 @@ class GeoDemonstrator(Tk):
                        height = 95, width = 170)
 
     # U zavisnosti od vrednosti var koju pročitamo iz
-    # padajućeg menija, pozivamo odgovarajuću fju transformacije
+    # padajućeg menija, poziva se prava transformacija
     var = StringVar(self)
     var.set('                 ')
     
@@ -379,7 +379,7 @@ class GeoDemonstrator(Tk):
     def odaberi_inverz(*args):
       self.inv = int(var.get())
       if self.inv == 1:
-        print('Odabrana inverznu transformaciju.')
+        print('Odabrana inverzna transformacija.')
     
     var = IntVar()
     var.trace('w', odaberi_inverz)
