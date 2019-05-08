@@ -1,8 +1,8 @@
 #### KriLa
-<img width="720" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/slike/2019_05_07.png">
+<img width="720" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/slike/2019_05_08.png">
 
 ## GeoDemonstrator :loop:
-Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske tranformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
+Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske transformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
 
 Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, poljima za unos parametara transformacija i dugmadima koja ih izvršavaju. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
 
