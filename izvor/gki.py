@@ -343,30 +343,6 @@ class GeoDemonstrator(Tk):
     # Dugme za pokretanje transformacije
     dugme_t = Button(okvir_t, text = 'Transformiši', 
                      command = self.transformiši).pack()
-    
-    # Oznake parametara koje korisnik unosi
-    x_koord_labela = Label(self, text = 'x:')
-    y_koord_labela = Label(self, text = 'y:')
-    ugao_labela = Label(self, text = '\u03B8:')
-    
-    # Postavljanje oznaka na prozor
-    x_koord_labela.place(x = 185, y = 348)
-    y_koord_labela.place(x = 185, y = 375)
-    ugao_labela.place(x = 185, y = 403)
-    
-    # Polja za unos vrednosti transformacija
-    self.x_koord = Entry(self, width = 4, state = 'disabled')
-    self.y_koord = Entry(self, width = 4, state = 'disabled')
-    self.ugao = Entry(self, width = 4, state = 'disabled')
-    
-    # Postavljanje polja na prozor
-    self.x_koord.place(x = 200, y = 348)
-    self.y_koord.place(x = 200, y = 375)
-    self.ugao.place(x = 200, y = 403)
-    
-    # Konfiguracija ostalih parametara
-    self.odabir_centra()
-    self.inverz()
   
   # Funkcija za praćenje inverza
   def inverz(self):
@@ -577,6 +553,30 @@ class GeoDemonstrator(Tk):
     
     # Inicijalizacija polja sa transformacijama
     self.transformacije()
+    
+    # Oznake parametara koje korisnik unosi
+    x_koord_labela = Label(self, text = 'x:')
+    y_koord_labela = Label(self, text = 'y:')
+    ugao_labela = Label(self, text = '\u03B8:')
+    
+    # Postavljanje oznaka na prozor
+    x_koord_labela.place(x = 185, y = 348)
+    y_koord_labela.place(x = 185, y = 375)
+    ugao_labela.place(x = 185, y = 403)
+    
+    # Polja za unos vrednosti transformacija
+    self.x_koord = Entry(self, width = 4, state = 'disabled')
+    self.y_koord = Entry(self, width = 4, state = 'disabled')
+    self.ugao = Entry(self, width = 4, state = 'disabled')
+    
+    # Postavljanje polja na prozor
+    self.x_koord.place(x = 200, y = 348)
+    self.y_koord.place(x = 200, y = 375)
+    self.ugao.place(x = 200, y = 403)
+    
+    # Konfiguracija ostalih parametara
+    self.odabir_centra()
+    self.inverz()
     
   # Dodavanje pritisnute tačke
   def dodaj_tačku(self, dog):

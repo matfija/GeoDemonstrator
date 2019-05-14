@@ -69,10 +69,12 @@ class Geom:
   # Uobičajeno množenje matrica ili, pak,
   # množenje matrice sa tačkom ravni
   def __mul__(self, dr):
-    if isinstance(dr, Geom):
-      return Geom(tuple(tuple(sum(self[i][k] * dr[k][j] for k in range(3))
-                           for j in range(3)) for i in range(3)))
-    else:
+    try:
+      drr = Geom.matrix(dr)
+      
+      return Geom(tuple(tuple(sum(self[i][k] * drr[k][j] for k in range(3))
+                                 for j in range(3)) for i in range(3)))
+    except:
       # Pomoćna torka za homogeno množenje
       drr = Tačka.point(dr)
       
@@ -116,37 +118,37 @@ class Geom:
 class Trans(Geom):
   def __init__(self, x=0, y=0, inv=False):
     if not isinstance(x, (int, float)):
-      self.mat = Geom.matrix(x)
+      x, y, _ = Tačka.point(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
-    else:
-      # Inverzna je aditivni inverz
-      if inv:
-        x = -x
-        y = -y
-      
-      # Matrica translacije u ravni
-      self.mat = ((1, 0, x),
-                  (0, 1, y),
-                  (0, 0, 1))
+    
+    # Inverzna je aditivni inverz
+    if inv:
+      x = -x
+      y = -y
+    
+    # Matrica translacije u ravni
+    self.mat = ((1, 0, x),
+                (0, 1, y),
+                (0, 0, 1))
 
 # Skaliranje nasleđuje geom. trans.
 class Skal(Geom):
   def __init__(self, x=1, y=1, t=None, tp=None, inv=False):
     if not isinstance(x, (int, float)):
-      self.mat = Geom.matrix(x)
+      x, y, _ = Tačka.point(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
-    else:
-      # Inverzna je multiplikativni inverz
-      if inv:
-        x = 1/x
-        y = 1/y
-      
-      # Matrica istezanja u ravni
-      self.mat = ((x, 0, 0),
-                  (0, y, 0),
-                  (0, 0, 1))
+    
+    # Inverzna je multiplikativni inverz
+    if inv:
+      x = 1/x
+      y = 1/y
+    
+    # Matrica istezanja u ravni
+    self.mat = ((x, 0, 0),
+                (0, y, 0),
+                (0, 0, 1))
     
     # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
@@ -155,19 +157,19 @@ class Skal(Geom):
 class Smic(Geom):
   def __init__(self, x=0, y=0, t=None, tp=None, inv=False):
     if not isinstance(x, (int, float)):
-      self.mat = Geom.matrix(x)
+      x, y, _ = Tačka.point(x)
     elif not isinstance(y, (int, float)):
       raise TypeError
-    else:
-      # Inverzna je aditivni inverz
-      if inv:
-        x = -x
-        y = -y
-      
-      # Matrica smicanja u ravni
-      self.mat = ((1, x, 0),
-                  (y, 1, 0),
-                  (0, 0, 1))
+    
+    # Inverzna je aditivni inverz
+    if inv:
+      x = -x
+      y = -y
+    
+    # Matrica smicanja u ravni
+    self.mat = ((1, x, 0),
+                (y, 1, 0),
+                (0, 0, 1))
     
     # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
@@ -176,7 +178,7 @@ class Smic(Geom):
 class Rot(Geom):
   def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
-      self.mat = Geom.matrix(u)
+      raise TypeError
     else:
       # Inverzna je aditivni inverz
       if inv:
@@ -198,7 +200,7 @@ class Rot(Geom):
 class Refl(Geom):
   def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
-      self.mat = Geom.matrix(u)
+      raise TypeError
     else:
       # Svaka refleksija je samoj sebi inverzna
       if inv:
@@ -247,20 +249,38 @@ class Tačka:
     else:
       raise TypeError
   
-  # Uobičajeno sabiranje dve tačke
+  # Uobičajeno sabiranje dve tačke ili
+  # tačke sa skalarom (vektorizacija)
   def __add__(self, dr):
-    drr = Tačka.point(dr)
-    return Tačka(self[i]+drr[i] for i in range(2))
+    if isinstance(dr, (int, float)):
+      return Tačka(self[i]+dr for i in range(2))
+    else:
+      drr = Tačka.point(dr)
+      return Tačka(self[i]+drr[i] for i in range(2))
   
-  # Uobičajeno oduzimanje dve tačke
+  # Uobičajeno oduzimanje dve tačke ili
+  # skalara od tačke (vektorizacija)
   def __sub__(self, dr):
-    drr = Tačka.point(dr)
-    return Tačka(self[i]-drr[i] for i in range(2))
+    if isinstance(dr, (int, float)):
+      return Tačka(self[i]-dr for i in range(2))
+    else:
+      drr = Tačka.point(dr)
+      return Tačka(self[i]-drr[i] for i in range(2))
   
   # Uobičajeno množenje tačke skalarom
-  def __rmul__(self, dr):
+  def __mul__(self, dr):
     drr = float(dr)
     return Tačka(drr*self[i] for i in range(2))
+  
+  # Analogne funkcije zdesna
+  def __radd__(self, dr):
+    return self+dr
+  
+  def __rsub__(self, dr):
+    return -(-self+dr)
+  
+  def __rmul__(self, dr):
+    return self*dr
   
   # Deljenje tačke skalarom
   def __truediv__(self, dr):
@@ -276,7 +296,7 @@ class Tačka:
   
   # Celobrojno deljenje sa ostatkom
   def __divmod__(self, dr):
-    return (self.__floordiv__(dr), self.__mod__(dr))
+    return self//dr, self%dr
   
   # Negacija tačke
   def __neg__(self):
