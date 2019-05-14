@@ -8,7 +8,7 @@ from time import time
 from functools import partial
 
 # Uključivanje modula sa operatorima
-from operator import gt, itemgetter as ig
+from operator import gt
 
 # Uključivanje modula sa nitima
 from nit import Nit
@@ -69,8 +69,8 @@ def konveksni_omot(tačke):
         return []
     
     # Niti za ekstremne tačke
-    nit1 = Nit(target = min, args = tačke, kwargs = {'key': ig(0)})
-    nit2 = Nit(target = max, args = tačke, kwargs = {'key': ig(0)})
+    nit1 = Nit(target = min, args = tačke)
+    nit2 = Nit(target = max, args = tačke)
     
     # Pokretanje niti
     nit1.start()

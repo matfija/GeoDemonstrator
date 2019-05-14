@@ -2,16 +2,16 @@
 <img height="460" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/slike/2019_05_08.png">
 
 ## GeoDemonstrator :loop:
-Seminarski rad na kursu Programske paradigme. Korisnik zadaje mnogougao u dvodimenzionom okruženju, nad kojim zatim vrši proizvoljne afine geometrijske transformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
+Seminarski rad na kursu Programske paradigme. Korisnik zadaje figuru u dvodimenzionom okruženju, nad kojom zatim vrši proizvoljne afine geometrijske transformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
 
-Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, poljima za unos parametara transformacija i dugmadima koja ih izvršavaju. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
+Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, poljima za odabir i unos parametara transformacija i dugmetom koje ih izvršava. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
 
 ## Tehnički detalji :robot:
 Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje osobina raznih paradigmi odnosno obrazaca programiranja koji su u osnovi ovog jezika ili čiji se koncepti provlače kroz njega:
 * imperativna/proceduralna paradigma: promenljive, funkcije, nizanje naredbi, opis procedure...,
 * skript paradigma: exec, eval, obrada pozivanja čak i sintaksno neispravnih naredbi...,
 * objektno-orijentisana paradigma: klase, nasleđivanje, polimorfizam, preopterećivanje operatora...,
-* funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, apstrakcija listi...,
+* funkcionalna paradigma: map, filter, partial, fje višeg reda, lambda fje, dekoratori, apstrakcija listi...,
 * komponentna paradigma: grafički korisnički interfejs, više nezavisnih modula koji predstavljaju ugovorene interfejse,
 * konkurentna paradigma: višenitno programiranje (nalaženje konveksnog omotača je u potpunosti paralelizovano),
 * reaktivno i programiranje vođeno događajima: GKI, koncept glavne petlje, osluškivanje i obrada događaja, reakcija na promenu stanja menija sa opcijama prilikom odabira željene transformacije,
