@@ -73,7 +73,7 @@ class Geom:
       drr = Geom.matrix(dr)
       
       return Geom(tuple(tuple(sum(self[i][k] * drr[k][j] for k in range(3))
-                                 for j in range(3)) for i in range(3)))
+                                   for j in range(3)) for i in range(3)))
     except:
       # Pomoćna torka za homogeno množenje
       drr = Tačka.point(dr)
@@ -83,6 +83,13 @@ class Geom:
       
       # Generička konstrukcija odgovarajućeg objekta
       return type(dr)((pom[0], pom[1]))
+  
+  # Moguće množenje sa matricom zdesna
+  def __rmul__(self, dr):
+    drr = Geom.matrix(dr)
+    
+    return Geom(tuple(tuple(sum(self[i][k] * drr[k][j] for k in range(3))
+                                 for j in range(3)) for i in range(3)))
   
   # Logaritamsko stepenovanje matrice
   def __pow__(self, dr):
