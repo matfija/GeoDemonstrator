@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+# Uključivanje sistemskog modula
+from sys import exit as greška
+
 # Uključivanje pomoćnog modula za
 # kutijice sa iskačućim porukama
 from tkinter.messagebox import showerror

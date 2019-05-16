@@ -178,6 +178,32 @@ class GeoMixinHelp():
       self.figura = self.platno.create_polygon(self.tačke, outline
          = 'black', fill = '') if len(self.tačke) > 1 else None
   
+  # Prikazivanje prozora za pomoć
+  def pomoć(self, dog = None):
+    # Log poruka o akciji
+    print('Ispisana upustva za upotrebu.')
+    
+    # Prikazivanje uputstava
+    showinfo('Pomoć',
+             'Na prikazanom prozoru nalaze se meni, platno i polja za'
+             ' odabir i unos. Levim klikom unosite tačke po platnu,'
+             ' nakon čega možete zaključiti unos (desni klik'
+             ' ili opcije iz menija), ispraviti figuru nalaženjem'
+             ' konveksnog omota (srednji klik ili opcije) i odabrati'
+             ' transformaciju iz padajućeg menija, kao i njene parametre.\n\n'
+             'Sledi tumačenje svake transformacije i njenih parametara:\n'
+             '\u2022 translacija – (pravo)linijsko kretanje'
+             ' u pravcu vektora (x, y),\n'
+             '\u2022 skaliranje – istezanje zraka iz tačke (t1, t2) za'
+             ' faktore x i y,\n'
+             '\u2022 smicanje – klizanje usled pritiska pod uglovima'
+             ' -arctg(x) i arctg(y) u odnosu na ose koordinatnog sistema'
+             ' sa centrom u (t1, t2),\n'
+             '\u2022 rotacija – kružno kretanje za ugao \u03b8'
+             ' oko tačke (t1, t2),\n'
+             '\u2022 refleksija – ogledalsko obrtanje u odnosu na pravu koja'
+             ' zaklapa ugao \u03b8 sa x osom i sadrži tačku (t1, t2).')
+  
   # Prikazivanje glavnih informacija o aplikaciji
   def info(self, dog = None):
     # Log poruka o akciji

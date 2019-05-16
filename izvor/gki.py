@@ -23,8 +23,8 @@ from functools import partial
 from geom import *
 
 # Nosilac programa je klasa GeoDemonstrator, koja
-# nasleđuje grafičku klasu Tk iz modula tkinter,
-# kao i mixin klasu radi razdvajanja funkcionalnosti
+# nasleđuje grafičku klasu Tk iz modula tkinter, kao
+# i mixin klase radi razdvajanja funkcionalnosti
 class GeoDemonstrator(Tk, GeoMixinTrans, GeoMixinHelp):
   # Konstruktor aplikacije
   def __init__(self):
@@ -92,13 +92,18 @@ class GeoDemonstrator(Tk, GeoMixinTrans, GeoMixinHelp):
     # Postavljanje glavnog menija i vezivanje
     # komandi za odgovarajuće funkcionalnosti
     meni.add_cascade(label = 'Opcije', menu = self.umeni)
-    meni.add_command(label = 'Info (F1)', command = self.info)
-    meni.add_command(label = 'Kraj (Esc)', command = self.kraj)
+    meni.add_command(label = 'Pomoć (H)', command = self.pomoć)
+    meni.add_command(label = 'Info (G)', command = self.info)
     self.config(menu = meni)
     
     # Vezivanje tipki za akcije analogne
-    # onima iz prethodno postavljenog menija
-    self.bind('<F1>', self.info)
+    # onima iz prethodno postavljenog menija;
+    # od F1 se odustalo jer se ne ponaša kako
+    # treba na operativnom sistemu Windows
+    self.bind('<H>', self.pomoć)
+    self.bind('<h>', self.pomoć)
+    self.bind('<G>', self.info)
+    self.bind('<g>', self.info)
     self.bind('<Escape>', self.kraj)
     
     # Vezivanje protokola zatvaranja prozora
