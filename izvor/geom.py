@@ -8,7 +8,7 @@ from math import sin, cos, radians, \
 from functools import partial, total_ordering
 
 # Uključivanje modula sa operatorima
-from operator import ne
+from operator import eq, ne
 
 # Uključivanje modula za kopiranje
 from copy import deepcopy
@@ -21,8 +21,18 @@ class Geom:
     if isinstance(arg, Geom):
       return deepcopy(arg.mat)
     
-    # Mora biti objekat dimenzija 3x3
+    # Može biti linearna matrica dimenzija 2x2
+    if len(arg) is 2 and all(map(partial(eq, 2), map(len, arg))):
+      return ((float(arg[0][0]), float(arg[0][1]), 0),
+              (float(arg[1][0]), float(arg[1][1]), 0),
+              (       0,                0,         1))
+    
+    # Inače mora biti objekat dimenzija 3x3
     if len(arg) is not 3 or any(map(partial(ne, 3), map(len, arg))):
+      raise TypeError
+    
+    # I to mora biti afina matrica
+    if arg[2][0] != 0 or arg[2][1] != 0 or arg[2][2] != 1:
       raise TypeError
     
     # Izdvajanje numeričkih vrednosti
@@ -54,6 +64,7 @@ class Geom:
       # Provera drugog argumenta
       return self.pomereno(tp)
     else:
+      # Ako nema tačke, ništa se ne menja
       return self.mat
   
   # Konstruktor transformacije
@@ -62,9 +73,12 @@ class Geom:
       self.mat = Geom.matrix(mat)
     else:
       # Jedinična matrica ako nema posleđene
-      self.mat = ((1, 0, 0),
-                  (0, 1, 0),
-                  (0, 0, 1))
+      #      |1 0 0|
+      # ID = |0 1 0|
+      #      |0 0 1|  
+      self.mat = tuple(tuple(1 if i is j else 0
+                             for j in range(3))
+                             for i in range(3))
   
   # Uobičajeno množenje matrica ili, pak,
   # množenje matrice sa tačkom ravni
@@ -232,7 +246,7 @@ class Tačka:
   # Ispitivanje da li je argument tačka
   def point(arg):
     if isinstance(arg, Tačka):
-      return (arg[0], arg[1], 1)
+      return deepcopy(arg.mat)
     
     # Sve vrednosti moraju biti numeričke
     dr = tuple(map(float, arg))
@@ -284,7 +298,7 @@ class Tačka:
     return self+dr
   
   def __rsub__(self, dr):
-    return -(-self+dr)
+    return -self+dr
   
   def __rmul__(self, dr):
     return self*dr
@@ -362,13 +376,14 @@ class Tačka:
 def test():
   print('Unosite linije koda do kraja ulaza.\n'
         'Podržano: dodela, kompozicija, stepenovanje,\n'
-        'štampanje, aritmetika i logika sa tačkama...\n'
+        'štampanje, aritmetika i logika sa objektima...\n'
         'Transformacije: translacija, skaliranje,\n'
         'smicanje, rotacija, refleksija.\n')
   
   # Mali interpretator koji se oslanja
   # na pozivanje Pajtonovog interpretera;
   # u pitanju je poznata RE(P)L petlja
+  # iz koje se izlazi EOF-om (CTRL+D)
   while True:
     try:
       exec(input())
