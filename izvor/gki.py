@@ -215,6 +215,10 @@ class GeoDemonstrator(Tk):
       
       # Izračunavanje transformacije na osnovu centra
       if self.centar.get() == 'centar platna':
+        # Pamćenje centra zbog log poruke
+        t1, t2 = 0, 0
+        
+        # Izračunavanje same transformacije
         transformacija = (self.funkcije[self.tr])(u, inv=self.inv.get())
       else:
         # Greška ako nisu uneti t1 i t2
@@ -229,6 +233,7 @@ class GeoDemonstrator(Tk):
         t2 = self.uzmi_prom('t2')
         if isnan(t2): return
         
+        # Izračunavanje same transformacije
         transformacija = (self.funkcije[self.tr])(u, t1, t2,
                                                   inv=self.inv.get())
     else:
@@ -258,9 +263,14 @@ class GeoDemonstrator(Tk):
           showerror('Greška', 'Nedozvoljeno inverzno smicanje!')
           return
       
-      # Translacija ne zahteva centar
+      # Translacija ne zahteva centar, a ni bilo koja
+      # transformacija sa centrom u koordinatnom početku
       if self.tr == 'translacija' or \
-         self.centar.get() == 'oko koordinatnog početka':
+         self.centar.get() == 'centar platna':
+        # Pamćenje centra zbog log poruke
+        t1, t2 = 0, 0
+        
+        # Izračunavanje same transformacije
         transformacija = (self.funkcije[self.tr])(x, y,
                                                   inv=self.inv.get())
       else:
@@ -276,6 +286,7 @@ class GeoDemonstrator(Tk):
         t2 = self.uzmi_prom('t2')
         if isnan(t2): return
         
+        # Izračunavanje same transformacije
         transformacija = (self.funkcije[self.tr])(x, y, t1, t2,
                                                   inv=self.inv.get())
     
@@ -290,12 +301,25 @@ class GeoDemonstrator(Tk):
       showerror('Greška', 'Transformacija izmešta figuru van platna!')
       return
     else:
-      # U slucaju da je korektno, iscrtava se transformisan poligon
+      # Log poruka o uspešnoj transformaciji
+      if self.tr == 'translacija':
+        print('Izvršena {}translacija,\nsa parametrima ({:.2f}, {:.2f}).'
+              .format('inverzna ' if self.inv.get() else '', x, y))
+      elif self.tr in ('rotacija, refleksija'):
+        print('Izvršena {}{},\nsa parametrom (uglom) {:.2f}\u00b0,\n'
+             'sa centrom u ({:.2f}, {:.2f}).'.format('inverzna '
+          if self.inv.get() else '', self.tr, u, t1, t2))
+      else:
+        print('Izvršeno {}{},\nsa parametrima ({:.2f}, {:.2f}),\n'
+             'sa centrom u ({:.2f}, {:.2f}).'.format('inverzno '
+          if self.inv.get() else '', self.tr, x, y, t1, t2))
+      
       # ttačke -> lista tačaka u koordinatnom sistemu sa slike
       # tačke -> lista tačaka u koordinatnom sistemu platna
-      print ('Izvršena transformacija: {}.'. format(self.tr))
       self.ttačke = nttačke
       self.tačke = list(map(partial(mul, self.kup), self.ttačke))
+      
+      # Crtanje transformisane figure
       self.nacrtaj_figuru()
       
   # Transformacijski okvir
@@ -336,7 +360,13 @@ class GeoDemonstrator(Tk):
     # Funkcija za praćenje promenljive
     var.trace('w', unos_transformacije)
     
-    # Padajuća lista geometrijskih transformacija
+    # Padajuća lista geometrijskih transformacija;
+    # umesto dosad korišćene fje place za postavljanje
+    # objekta na tačno određeno mesto na prozoru, ovde
+    # se koristi pack, koji objekat optimalno spakuje
+    # na raspoloživom prostoru; iz tog razloga je i
+    # roditeljski element upravo transformacioni okvir,
+    # u koji se pakuje, a ne self, kako je dosad bilo
     option = OptionMenu(okvir_t, var, 'translacija', 'skaliranje', 
                         'smicanje', 'rotacija', 'refleksija').pack()
     
@@ -353,7 +383,7 @@ class GeoDemonstrator(Tk):
     
     # Dugme za odabir inverza
     self.inverz = Checkbutton(self, text = 'Invertuj promenu',
-                              variable = self.inv, command = None)
+                                    variable = self.inv)
     self.inverz.place(x = 262, y = 410)
   
   # Kontrola pristupa poljima za unos
@@ -557,7 +587,7 @@ class GeoDemonstrator(Tk):
     # Oznake parametara koje korisnik unosi
     x_koord_labela = Label(self, text = 'x:')
     y_koord_labela = Label(self, text = 'y:')
-    ugao_labela = Label(self, text = '\u03B8:')
+    ugao_labela = Label(self, text = '\u03b8:')
     
     # Postavljanje oznaka na prozor
     x_koord_labela.place(x = 185, y = 348)

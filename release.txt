@@ -1,0 +1,35 @@
+##### INFO ##################################################
+GeoDemonstrator
+
+Seminarski rad na kursu Programske paradigme. Korisnik zadaje figuru u dvodimenzionom okruzenju, nad kojom zatim vrsi proizvoljne afine geometrijske transformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
+
+Ideja je omoguciti jednostavno interaktivno prikazivanje i lakse razumevanje materije koja se obradjuje na casovima Geometrije za I smer, kao i Racunarske grafike.
+
+Autori (tim KriLa):
+* Kristina Pantelic, 91/2016,
+* Lazar Vasovic, 99/2016.
+Matematicki fakultet, 2019.
+
+GitHub repo:
+https://github.com/matf-pp2019/KriLa
+#############################################################
+
+##### BUILD #################################################
+Repozitorijum se sastoji iz dva foldera. U prvom (izvor) nalaze se Python skriptovi, medju kojima je i glavni main.py, kojem ostali isporucuju svoje funkcionalnosti. U drugom su koriscene slike, a u korenom direktorijumu se jos nalaze i propratni fajlovi: release, readme, licenca, clean.
+
+Slede uputstva za podesavanje/pokretanje programa na oba podrzana operativna sistema: Microsoft Windows (Windows 10) i Ubuntu (vazi i za sve njemu slicne distribucije Linuxa).
+
+Windows (WIN10):
+1) Pokrenuti datoteku GeoDemonstrator.exe i usput zanemariti upozorenja o mogucem narusavanju sigurnosti. Ona se javljaju zato sto nije posredi nikakvo zvanicno izdanje, a Windows je preobazriv kada su u pitanju takve aplikacije.
+
+2) Alternativno, pozvati Pajtonov interpretator, bilo neposredno, iz komandne linije ili PowerShell-a, nad glavnim fajlom (python main.py), bilo posredno, pomocu nekog okruzenja kao sto je zvanicni/standardni IDLE.
+
+NAPOMENA: izvrsivi fajl napravljen je 'zamrzavanjem' koda pomocu alata PyInstaller (komanda pyinstaller --add-data ..\slike\koord.gif;. -F main.py). Ovaj alat u sustini enkapsulira kod i ostale podatke poput slika u izvrsivi fajl, a zatim se nad njima izvrsava kao da je Pajtonov interpretator, odnosno njegova implementacija u C-u. Iz tog razloga je za pokretanje neophodno imati novije rantajm biblioteke (DLL, dostupne uz MVC++ 2015) na racunaru na kom se fajl pokrece. Ukoliko je operativni sistem Windows 10, nije neophodno dodatno podesavanje, dok je u slucaju starijih verzija potrebno obezbediti te biblioteke.
+
+Linux (Ubuntu):
+1) Pozvati Pajtonov interpretator nad glavnim fajlom (python3 main.py).
+
+2) Alternativno, direktno izvrsiti glavnu datoteku (./main.py), nakon sto je prethodno omoguceno njeno izvrsavanje na korisnickoj masini (chmod u+x main.py).
+
+NAPOMENA: neophodno je imati potrebne biblioteke, poput grafickog modula tkinter (sudo apt-get install python3-tk).
+#############################################################
