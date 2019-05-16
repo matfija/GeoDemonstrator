@@ -67,20 +67,68 @@ class Geom:
       # Ako nema tačke, ništa se ne menja
       return self.mat
   
+  # Opšti postupak inverzije afinih transformacijskih
+  # matrica; u suštini je zasnovan na ideji o adjungovanoj
+  # matrici, koja se računa preko kofaktora (determinanti
+  # manjih 2x2 podmatrica), ali ovde je taj postupak
+  # skraćen i direktno se vraća sračunati rezultat:
+  #     |a   b   c|                        | e  -b   bf-ce|
+  # T = |d   e   f|,  inv(T) = 1/(ae-bd) * |-d   a   cd-af|
+  #     |0   0   1|                        | 0   0     1  |
+  def inv(self, inplace = False):
+    # Nije moguće 'u mestu' menjati
+    # nešto što nije transformacija
+    if not isinstance(self, Geom) and inplace:
+      raise TypeError
+    
+    # Pomoćna promenljiva zarad mogućnosti
+    # generičkog rada sa više tipova podataka
+    pom = Geom.matrix(self)
+    
+    # Izvlačenje vrednosti polja matrice
+    a, b, c = tuple(pom[0][i] for i in range(3))
+    d, e, f = tuple(pom[1][i] for i in range(3))
+    
+    # Računanje nekih kofaktora
+    k = 1/(a*e-b*d)
+    t1 = b*f-c*e
+    t2 = c*d-a*f
+    
+    # Formiranje inverza po izloženoj formuli
+    if isinstance(self, Geom):
+      matrica = ((k*e, k*-b, k*t1),
+                 (k*-d, k*a, k*t2),
+                 (  0,   0,    1 ))
+    else:
+      # Dinamičko određivanje tipova ako nije
+      # prosleđena geometrijska transformacija
+      matrica = type(self)((type(self[0])((k*e, k*-b, k*t1)),
+                            type(self[1])((k*-d, k*a, k*t2)),
+                           (type(self[2]) if len(self) == 3
+                         else type(self))(( 0,    0,    1 ))))
+    
+    # Zamena ako je zatražena
+    if inplace:
+      self.mat = matrica
+    
+    # Vraćanje rezultata
+    return Geom(matrica) if isinstance(self, Geom) else matrica
+  
   # Konstruktor transformacije
   def __init__(self, mat = None):
     if mat is not None:
       self.mat = Geom.matrix(mat)
     else:
       # Jedinična matrica ako nema posleđene
-      #      |1 0 0|
-      # ID = |0 1 0|
-      #      |0 0 1|  
+      #      |1   0   0|
+      # ID = |0   1   0|
+      #      |0   0   1|
       self.mat = tuple(tuple(1 if i is j else 0
                              for j in range(3))
                              for i in range(3))
   
-  # Moguće množenje matrice skalarom,
+  # Moguće množenje matrice skalarom
+  # (to je analogno skaliranju sleva),
   # množenje dveju matrica ili, pak,
   # množenje matrice sa tačkom ravni
   def __mul__(self, dr):
@@ -117,8 +165,10 @@ class Geom:
   
   # Logaritamsko stepenovanje matrice
   def __pow__(self, dr):
-    if not isinstance(dr, int) or dr < 0:
+    if not isinstance(dr, int):
       raise TypeError
+    elif dr < 0:
+      return pow(self.inv(), -dr)
     elif dr is 0:
       return Geom()
     elif dr is 1:
@@ -162,10 +212,11 @@ class Trans(Geom):
     elif not isinstance(y, (int, float)):
       raise TypeError
     
-    # Inverzna je aditivni inverz
-    if inv:
-      x = -x
-      y = -y
+    # Inverzna je aditivni inverz:
+    #     |1   0   x|            |1   0  -x|
+    # T = |0   1   y|,  inv(T) = |0   1  -y|
+    #     |0   0   1|            |0   0   1|
+    if inv: x, y = -x, -y
     
     # Matrica translacije u ravni
     self.mat = ((1, 0, x),
@@ -180,10 +231,11 @@ class Skal(Geom):
     elif not isinstance(y, (int, float)):
       raise TypeError
     
-    # Inverzna je multiplikativni inverz
-    if inv:
-      x = 1/x
-      y = 1/y
+    # Inverzna je multiplikativni inverz:
+    #     |x   0   0|            |1/x  0   0|
+    # T = |0   y   0|,  inv(T) = | 0  1/y  0|
+    #     |0   0   1|            | 0   0   1|
+    if inv: x, y = 1/x, 1/y
     
     # Matrica istezanja u ravni
     self.mat = ((x, 0, 0),
@@ -201,15 +253,27 @@ class Smic(Geom):
     elif not isinstance(y, (int, float)):
       raise TypeError
     
-    # Inverzna je aditivni inverz
+    # Inverzna je aditivni inverz, ali
+    # skaliran za korektivni faktor:
+    #     |1   x   0|                       | 1  -x   0|
+    # T = |y   1   0|,  inv(T) = 1/(1-xy) * |-y   1   0|
+    #     |0   0   1|                       | 0   0   1|
+    # Alternativno, moguće bi bilo primeniti
+    # transformaciju bez korektivnog faktora,
+    # ali je u tom slučaju neophodno popraviti
+    # matricu, što se u kodu može učiniti npr.:
+    # if inv and x != 0 and y != 0:
+    #   self.mat = Geom.matrix(Skal(1-x*y, 1-x*y, inv=True) * \
+    #              Trans(t1*x*y, t2*x*y, inv=True) * self.mat)
+    f = 1
     if inv:
-      x = -x
-      y = -y
+      f = 1/(1-x*y)
+      x, y = -x, -y
     
     # Matrica smicanja u ravni
-    self.mat = ((1, x, 0),
-                (y, 1, 0),
-                (0, 0, 1))
+    self.mat = (( f,  f*x, 0),
+                (f*y,  f,  0),
+                ( 0,   0,  1))
     
     # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
@@ -219,19 +283,21 @@ class Rot(Geom):
   def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
       raise TypeError
-    else:
-      # Inverzna je aditivni inverz
-      if inv:
-        u = -u
-      
-      # Koeficijenti rotacije u ravni
-      pom1 = cos(radians(u))
-      pom2 = sin(radians(u))
-      
-      # Matrica rotacije u ravni
-      self.mat = ((pom1, -pom2,  0),
-                  (pom2,  pom1,  0),
-                  (0,      0,    1))
+    
+    # Inverzna je aditivni inverz:
+    #     |cos(u)  -sin(u)   0|            | cos(u)   sin(u)   0|
+    # T = |sin(u)   cos(u)   0|,  inv(T) = |-sin(u)   cos(u)   0|
+    #     |  0        0      1|            |   0        0      1|
+    if inv: u = -u
+    
+    # Koeficijenti rotacije u ravni
+    pom1 = cos(radians(u))
+    pom2 = sin(radians(u))
+    
+    # Matrica rotacije u ravni
+    self.mat = ((pom1, -pom2,  0),
+                (pom2,  pom1,  0),
+                (0,      0,    1))
     
     # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
@@ -241,19 +307,21 @@ class Refl(Geom):
   def __init__(self, u=0, t=None, tp=None, inv=False):
     if not isinstance(u, (int, float)):
       raise TypeError
-    else:
-      # Svaka refleksija je samoj sebi inverzna
-      if inv:
-        pass
-      
-      # Koeficijenti refleksije u ravni
-      pom1 = cos(radians(2*u))
-      pom2 = sin(radians(2*u))
-      
-      # Matrica refleksije u ravni
-      self.mat = ((pom1,  pom2,  0),
-                  (pom2, -pom1,  0),
-                  (0,      0,    1))
+    
+    # Svaka refleksija je samoj sebi inverzna:
+    #     |cos(2u)   sin(2u)   0|
+    # T = |sin(2u)  -cos(2u)   0|,  inv(T) = T
+    #     |  0         0       1|
+    if inv: pass
+    
+    # Koeficijenti refleksije u ravni
+    pom1 = cos(radians(2*u))
+    pom2 = sin(radians(2*u))
+    
+    # Matrica refleksije u ravni
+    self.mat = ((pom1,  pom2,  0),
+                (pom2, -pom1,  0),
+                (0,      0,    1))
     
     # Eventualno centriranje transformacije
     self.mat = self.pomereno(t, tp)
@@ -278,7 +346,10 @@ class Tačka:
     else:
       raise TypeError
   
-  # Konsktruktor klase
+  # Konsktruktor tačke; podrazumevana je
+  # vrednost KP = (0, 0, 1) tj. (0, 0);
+  # nisu podržane beskonačno udaljene tačke
+  # proširene afine ravni tipa (x, y, 0)
   def __init__(self, x=0, y=0, w=1):
     if  isinstance(x, (int, float)) \
     and isinstance(y, (int, float)) \

@@ -1,5 +1,5 @@
 #### KriLa
-<img height="460" src="https://raw.githubusercontent.com/matf-pp2019/KriLa/master/slike/2019_05_08.png">
+<img height="460" src="https://raw.githubusercontent.com/matf-pp2019/Geo-Demonstrator/master/slike/2019_05_08.png">
 
 ## GeoDemonstrator :loop:
 Seminarski rad na kursu Programske paradigme. Korisnik zadaje figuru u dvodimenzionom okruženju, nad kojom zatim vrši proizvoljne afine geometrijske transformacije: translaciju, rotaciju, refleksiju, skaliranje, smicanje.
@@ -23,11 +23,11 @@ Upotrebljeni su i prikladni pomoćni moduli neobuhvaćeni fakultetskim kursevima
 GKI je odrađen pomoću Pajtonovog standardnog Tk/Tcl paketa – [tkinter](https://docs.python.org/3/library/tkinter.html) – koji se može podesiti komandom poput `sudo apt-get install python3-tk` za Ubuntu za starije verzije, dok je za novije automatski podešen.
 
 ## Podešavanje :memo:
-Nakon kloniranja (`git clone https://github.com/matf-pp2019/KriLa`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
+Nakon kloniranja (`git clone https://github.com/matf-pp2019/Geo-Demonstrator`) tj. bilo kog načina preuzimanja repozitorijuma, program se pokreće uobičajenim pozivanjem Pajtonovog interpretatora nad glavnim fajlom (`python3 main.py`).
 
 Osim toga, omogućeno je i direktno pokretanje komandom poput `./main.py`, pošto se na početku svake datoteke sa glavnom (main ili test) fjom nalazi shebang koji sugeriše operativnom sistemu gde se nalazi neophodni interpretator. Naravno, za ovaj pristup je neophodno prethodno učiniti fajl izvršivim komandom poput `chmod u+x main.py`.
 
-Program korektno radi i na operativnom sistemu Windows, na kom je testiran preko alata [IDLE](https://www.python.org/downloads/release/python-323/). Za oba navedena operativna sistema dostupne su release verzije rada na odgovarajućoj [stranici](https://github.com/matf-pp2019/KriLa/releases) na GitHub adresi projekta.
+Program korektno radi i na operativnom sistemu Windows, na kom je testiran preko alata [IDLE](https://www.python.org/downloads/release/python-323/). Za oba navedena operativna sistema dostupne su release verzije rada na odgovarajućoj [stranici](https://github.com/matf-pp2019/Geo-Demonstrator/releases) na GitHub adresi projekta.
 
 ## Članovi tima :computer:
 * [Kristina Pantelić](https://github.com/beskonacnost), 91/2016

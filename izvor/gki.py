@@ -254,11 +254,11 @@ class GeoDemonstrator(Tk):
           showerror('Greška', 'Deljenje nulom pri skaliranju!')
           return
       
-      # Obrada geometrijske greške (loša inverzna
-      # matrica) u slučaju inverznog smicanja
+      # Obrada aritmetičke greške (deljenja sa
+      # nulom) u slučaju inverznog smicanja
       if self.tr.get() == 'smicanje' and \
-         self.inv.get() and x != 0 and y != 0:
-          showerror('Greška', 'Nedozvoljeno inverzno smicanje!')
+         self.inv.get() and x*y == 1:
+          showerror('Greška', 'Deljenje nulom pri smicanju!')
           return
       
       # Translacija ne zahteva centar, a ni bilo koja
@@ -323,7 +323,7 @@ class GeoDemonstrator(Tk):
   # Transformacijski okvir
   def transformacije(self):
     # Mapa za preslikavanje niske u
-    # odgavarajuću fju transformacije
+    # odgavarajuću klasu transformacije
     self.funkcije = {'translacija': Trans,
                      'skaliranje': Skal, 
                      'smicanje': Smic,

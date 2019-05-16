@@ -11,7 +11,7 @@ Autori (tim KriLa):
 Matematicki fakultet, 2019.
 
 GitHub repo:
-https://github.com/matf-pp2019/KriLa
+https://github.com/matf-pp2019/Geo-Demonstrator
 #############################################################
 
 ##### BUILD #################################################
