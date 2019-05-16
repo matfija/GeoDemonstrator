@@ -80,9 +80,15 @@ class Geom:
                              for j in range(3))
                              for i in range(3))
   
-  # Uobičajeno množenje matrica ili, pak,
+  # Moguće množenje matrice skalarom,
+  # množenje dveju matrica ili, pak,
   # množenje matrice sa tačkom ravni
   def __mul__(self, dr):
+    if isinstance(dr, (int, float)):
+      return Geom((tuple(dr*self[0][i] for i in range(3)),
+                   tuple(dr*self[1][i] for i in range(3)),
+                     (0,             0,             1)))
+    
     try:
       drr = Geom.matrix(dr)
       
@@ -98,12 +104,34 @@ class Geom:
       # Generička konstrukcija odgovarajućeg objekta
       return type(dr)((pom[0], pom[1]))
   
-  # Moguće množenje sa matricom zdesna
+  # Moguće množenje skalarom
+  # ili drugom matricom zdesna
   def __rmul__(self, dr):
+    if isinstance(dr, (int, float)):
+      return self * dr
+    
     drr = Geom.matrix(dr)
     
     return Geom(tuple(tuple(sum(self[i][k] * drr[k][j] for k in range(3))
                                  for j in range(3)) for i in range(3)))
+  
+  # Sabiranje dve matrice ili, pak,
+  # matrice i skalara (vektorizacija)
+  def __add__(self, dr):
+    if isinstance(dr, (int, float)):
+      return Geom((tuple(self[0][i]+dr for i in range(3)),
+                   tuple(self[1][i]+dr for i in range(3)),
+                     (0,             0,             1)))
+    
+    drr = Geom.matrix(dr)
+    
+    return Geom((tuple(self[0][i]+drr[0][i] for i in range(3)),
+                 tuple(self[1][i]+drr[1][i] for i in range(3)),
+                      (0,             0,             1)))
+  
+  # Analogno sabiranje zdesna
+  def __radd__(self, dr):
+    return self + dr
   
   # Logaritamsko stepenovanje matrice
   def __pow__(self, dr):
@@ -121,7 +149,7 @@ class Geom:
   # Magični metod za jednakost
   def __eq__(self, dr):
     if isinstance(dr, Geom):
-      return self.mat == dr.mat
+      return eval(repr(self)).mat == eval(repr(dr)).mat
     else:
       raise TypeError
   
@@ -134,6 +162,15 @@ class Geom:
     return 'Transformacija:\n[(%.2f, %.2f, %.2f)\n' \
            ' (%.2f, %.2f, %.2f)\n (%.2f, %.2f, %.2f)]' \
            % tuple(self[i][j] for i in range(3) for j in range(3))
+  
+  # Uprošćena reprezentacija objekta u kodu;
+  # zadaje se osam cifara kao bitno
+  def __repr__(self):
+    return 'Geom(((%.8f, %.8f, %.8f),' \
+                 '(%.8f, %.8f, %.8f),' \
+                 '(%.8f, %.8f, %.8f)))' \
+           % tuple(self[i][j] for i in range(3)
+                              for j in range(3))
 
 # Translacija nasleđuje geom. trans.
 class Trans(Geom):
@@ -293,15 +330,21 @@ class Tačka:
     drr = float(dr)
     return Tačka(drr*self[i] for i in range(2))
   
-  # Analogne funkcije zdesna
+  # Analogno sabiranje zdesna
   def __radd__(self, dr):
-    return self+dr
+    return self + dr
   
+  # Analogno oduzimanje zdesna
   def __rsub__(self, dr):
-    return -self+dr
+    return -self + dr
   
+  # Analogno množenje zdesna ili
+  # množenje tačke matricom
   def __rmul__(self, dr):
-    return self*dr
+    try:
+      return self * dr
+    except:
+      return Geom(dr) * self
   
   # Deljenje tačke skalarom
   def __truediv__(self, dr):
@@ -350,14 +393,14 @@ class Tačka:
   # Magični metod za jednakost
   def __eq__(self, dr):
     if isinstance(dr, Tačka):
-      return self.mat == dr.mat
+      return eval(repr(self)).mat == eval(repr(dr)).mat
     else:
       raise TypeError
   
   # Magični metod za poređenje
   def __lt__(self, dr):
     if isinstance(dr, Tačka):
-      return self.mat < dr.mat
+      return eval(repr(self)).mat < eval(repr(dr)).mat
     else:
       raise TypeError
   
@@ -368,6 +411,12 @@ class Tačka:
   # Uobičajena string predstava tačke
   def __str__(self):
     return 'Tačka:\n[(%.2f, %.2f)]' \
+           % tuple(self[i] for i in range(2))
+  
+  # Uprošćena reprezentacija objekta u kodu;
+  # zadaje se osam cifara kao bitno
+  def __repr__(self):
+    return 'Tačka(%.8f, %.8f)' \
            % tuple(self[i] for i in range(2))
 
 # Fja za testiranje implementiranih klasa;
