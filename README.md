@@ -6,6 +6,8 @@ Seminarski rad na kursu Programske paradigme. Korisnik zadaje figuru u dvodimenz
 
 Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, poljima za odabir i unos parametara transformacija i dugmetom koje ih izvršava. Ideja je omogućiti jednostavno interaktivno prikazivanje i lakše razumevanje materije koja se obrađuje na časovima Geometrije za I smer, kao i Računarske grafike.
 
+Pored toga, sastavni deo rada su i pomoćne odnosno dodatne biblioteke tj. moduli koji se mogu nezavisno upotrebljavati, a koji implementiraju i više funkcionalnosti nego što je potrebno za glavni program. Tu se posebno izdvaja geometrijski modul (možda neki budući GeoTransformator), a ne treba zanemariti ni modul sa 'pričljivom' metaniti sa povratnom vrednošću, kao ni modul za izračunavanje konveksnog omotača skupa tačaka.
+
 ## Tehnički detalji :robot:
 Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje osobina raznih paradigmi odnosno obrazaca programiranja koji su u osnovi ovog jezika ili čiji se koncepti provlače kroz njega:
 * imperativna/proceduralna paradigma: promenljive, funkcije, nizanje naredbi, opis procedure...,
