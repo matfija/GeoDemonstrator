@@ -115,24 +115,6 @@ class Geom:
     return Geom(tuple(tuple(sum(self[i][k] * drr[k][j] for k in range(3))
                                  for j in range(3)) for i in range(3)))
   
-  # Sabiranje dve matrice ili, pak,
-  # matrice i skalara (vektorizacija)
-  def __add__(self, dr):
-    if isinstance(dr, (int, float)):
-      return Geom((tuple(self[0][i]+dr for i in range(3)),
-                   tuple(self[1][i]+dr for i in range(3)),
-                     (0,             0,             1)))
-    
-    drr = Geom.matrix(dr)
-    
-    return Geom((tuple(self[0][i]+drr[0][i] for i in range(3)),
-                 tuple(self[1][i]+drr[1][i] for i in range(3)),
-                      (0,             0,             1)))
-  
-  # Analogno sabiranje zdesna
-  def __radd__(self, dr):
-    return self + dr
-  
   # Logaritamsko stepenovanje matrice
   def __pow__(self, dr):
     if not isinstance(dr, int) or dr < 0:
@@ -425,7 +407,7 @@ class Tačka:
 def test():
   print('Unosite linije koda do kraja ulaza.\n'
         'Podržano: dodela, kompozicija, stepenovanje,\n'
-        'štampanje, aritmetika i logika sa objektima...\n'
+        'štampanje, aritmetika i logika sa tačkama...\n'
         'Transformacije: translacija, skaliranje,\n'
         'smicanje, rotacija, refleksija.\n')
   
