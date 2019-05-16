@@ -110,6 +110,7 @@ class Geom:
     # Zamena ako je zatražena
     if inplace:
       self.mat = matrica
+      return
     
     # Vraćanje rezultata
     return Geom(matrica) if isinstance(self, Geom) else matrica

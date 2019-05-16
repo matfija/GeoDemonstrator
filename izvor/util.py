@@ -181,7 +181,7 @@ class GeoMixinHelp():
   # Prikazivanje prozora za pomoć
   def pomoć(self, dog = None):
     # Log poruka o akciji
-    print('Ispisana upustva za upotrebu.')
+    print('Ispisana uputstva za upotrebu.')
     
     # Prikazivanje uputstava
     showinfo('Pomoć',
@@ -198,8 +198,8 @@ class GeoMixinHelp():
              '\u2022 skaliranje – istezanje zraka iz tačke (t1, t2) za'
              ' faktore x i y,\n'
              '\u2022 smicanje – klizanje usled pritiska pod uglovima'
-             ' -arctg(x) i arctg(y) u odnosu na ose koordinatnog sistema'
-             ' sa centrom u (t1, t2),\n'
+             ' -arctg(x) i arctg(y) u odnosu na ose koord. sistema sa'
+             ' centrom u (t1, t2),\n'
              '\u2022 rotacija – kružno kretanje za ugao \u03b8'
              ' oko tačke (t1, t2),\n'
              '\u2022 refleksija – ogledalsko obrtanje u odnosu na pravu koja'
