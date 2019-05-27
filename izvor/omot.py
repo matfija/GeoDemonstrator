@@ -105,8 +105,8 @@ def konveksni_omot(tačke):
     omot = [v] + p1 + [u] + p2
     
     # Popravka u slučaju dve tačke
-    return omot[0] if len(omot) is 2 \
-    and omot[0] == omot[1] else omot
+    return [omot[0]] if len(omot) is 2 \
+     and omot[0] == omot[1] else omot
 
 # Fja za testiranje implementiranog algoritma
 def test():
