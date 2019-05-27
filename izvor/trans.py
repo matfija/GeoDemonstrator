@@ -46,11 +46,6 @@ class GeoMixinTrans():
       showerror('Greška', 'Unesite tačke na platno!')
       return
     
-    # Neophodno je da transformacija bude odabrana
-    if not self.tr.get():
-      showerror('Greška', 'Izaberite transformaciju!')
-      return
-    
     # Rotacija i refleksija moraju da dobiju ugao
     if self.tr.get() in ('rotacija', 'refleksija'):
       if not self.ugao.get():
@@ -180,6 +175,10 @@ class GeoMixinTrans():
     # nije birana transformacija
     if not self.tr.get():
       return
+    
+    # Svaka transformacija je invertibilna
+    self.dugme_t.config(state = 'normal')
+    self.inverz.config(state = 'normal')
     
     # Svaka transformacija sem translacije
     # osvežava odabir centra transformacije

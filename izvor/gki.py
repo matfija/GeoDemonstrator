@@ -212,12 +212,14 @@ class GeoDemonstrator(Tk, GeoMixinTrans, GeoMixinHelp):
     # na raspoloživom prostoru; iz tog razloga je i
     # roditeljski element upravo transformacioni okvir,
     # u koji se pakuje, a ne self, kako je dosad bilo
-    option = OptionMenu(okvir_t, self.tr, 'translacija', 'skaliranje', 
-                    'smicanje', 'rotacija', 'refleksija').pack(fill='x')
+    OptionMenu(okvir_t, self.tr, 'translacija', 'skaliranje', 
+              'smicanje', 'rotacija', 'refleksija').pack(fill='x')
     
     # Dugme za pokretanje transformacije
-    dugme_t = Button(okvir_t, text = 'Transformiši', 
-              command = self.transformiši).pack(fill='x')
+    self.dugme_t = Button(okvir_t, text = 'Transformiši', 
+                                   command = self.transformiši,
+                                   state = 'disabled')
+    self.dugme_t.pack(fill='x')
   
   # Odabir centra transformacije
   def init_centar(self):
@@ -291,9 +293,9 @@ class GeoDemonstrator(Tk, GeoMixinTrans, GeoMixinHelp):
                         print('Odabrana klasična transformacija.'))
     
     # Dugme za odabir inverza
-    inverz = Checkbutton(self, text = 'Invertuj promenu',
-                                 variable = self.inv)
-    inverz.place(x = 262, y = 410)
+    self.inverz = Checkbutton(self, text = 'Invertuj promenu',
+                              variable = self.inv, state = 'disabled')
+    self.inverz.place(x = 262, y = 410)
 
 # Obaveštenje o grešci ukoliko je modul
 # pokrenut kao samostalan program

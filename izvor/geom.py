@@ -104,7 +104,7 @@ class Geom:
       # prosleđena geometrijska transformacija
       matrica = type(self)((type(self[0])((k*e, k*-b, k*t1)),
                             type(self[1])((k*-d, k*a, k*t2)),
-                           (type(self[2]) if len(self) == 3
+                           (type(self[2]) if len(self) is 3
                          else type(self))(( 0,    0,    1 ))))
     
     # Zamena ako je zatražena
@@ -148,7 +148,8 @@ class Geom:
       drr = Tačka.point(dr)
       
       pom = tuple(sum(self[i][j] * drr[j]
-                  for j in range(3)) for i in range(3))
+                      for j in range(3))
+                      for i in range(3))
       
       # Generička konstrukcija odgovarajućeg objekta
       return type(dr)((pom[0], pom[1]))
@@ -189,6 +190,10 @@ class Geom:
   # Magični metod za dohvatanje elementa
   def __getitem__(self, indeks):
     return self.mat[indeks]
+  
+  # Magični metod za iteraciju
+  def __iter__(self):
+    return iter(self.mat)
   
   # Uobičajena string predstava matrice
   def __str__(self):
@@ -461,6 +466,10 @@ class Tačka:
   # Magični metod za dohvatanje elementa
   def __getitem__(self, indeks):
     return self.mat[indeks]
+  
+  # Magični metod za iteraciju
+  def __iter__(self):
+    return iter(self.mat)
   
   # Uobičajena string predstava tačke
   def __str__(self):

@@ -69,8 +69,8 @@ def konveksni_omot(tačke):
         return []
     
     # Niti za ekstremne tačke
-    nit1 = Nit(target = min, args = tačke)
-    nit2 = Nit(target = max, args = tačke)
+    nit1 = Nit(target = min, args = [tačke])
+    nit2 = Nit(target = max, args = [tačke])
     
     # Pokretanje niti
     nit1.start()
@@ -102,7 +102,11 @@ def konveksni_omot(tačke):
     p1, p2 = nit1.join(), nit2.join()
 
     # Nalaženje omota na obe strane
-    return [v] + p1 + [u] + p2
+    omot = [v] + p1 + [u] + p2
+    
+    # Popravka u slučaju dve tačke
+    return omot[0] if len(omot) is 2 \
+    and omot[0] == omot[1] else omot
 
 # Fja za testiranje implementiranog algoritma
 def test():

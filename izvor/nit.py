@@ -49,7 +49,7 @@ class StaraNit(Thread):
   # Prevazilaženje metoda za pokretanje niti
   def run(self):
     # Ukoliko postoji fja, rezultat je ono što vraća
-    if self._target is not None:
+    if hasattr(self, '_target') and self._target is not None:
       self.rezultat = self._target(*self._args, **self._kwargs)
   
   # Prevazilaženje metoda za čekanje niti
@@ -88,7 +88,9 @@ Nit = MetaNit('Nit', tuple([Thread]), {})
 
 # Postavljanje lambda metoda za stringovnu predstavu
 Nit.__str__ = lambda self: 'Nit za {} nad {}' \
-          .format(self._target.__name__, self._args)
+          .format(self._target.__name__, self._args) \
+        if hasattr(self, '_target') and self._target is \
+              not None else 'Nedefinisana nit'
 
 # Vezivanje metoda napravljene klase
 # za one napisane za klasu StaraNit
@@ -120,8 +122,8 @@ def test():
   # Definisanje niti koje sa jednakom verovatnoćom
   # traže minimim ili maksimum generisanog niza
   for i in range(3):
-    niti.append(Nit(args = brojevi, target = min if randrange(2)
-                          == 0 else max, Verbose = True))
+    niti.append(Nit(args = [brojevi], target = min if randrange(2)
+                           == 0 else max, Verbose = True))
   
   # Pokretanje niti
   for i in range(3):
