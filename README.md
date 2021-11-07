@@ -8,6 +8,8 @@ Ukratko, skelet projekta je GKI sa platnom koje predstavlja koordinatni sistem, 
 
 Pored toga, sastavni deo rada su i pomoćne odnosno dodatne biblioteke tj. moduli koji se mogu nezavisno upotrebljavati, a koji implementiraju i više funkcionalnosti nego što je potrebno za glavni program. Tu se posebno izdvaja geometrijski modul (možda neki budući GeoTransformator), a ne treba zanemariti ni modul sa 'pričljivom' metaniti sa povratnom vrednošću, kao ni modul za paralelizovano izračunavanje konveksnog omotača skupa tačaka.
 
+Rad je u proširenoj verziji predstavljen na [X simpozijumu „Matematika i primene“](https://alas.matf.bg.ac.rs/~konferencija/2019/), u okviru sekcije posvećene naučnoistraživačkom i stručnom radu studenata. Moguće je pronaći ga u [programu](https://alas.matf.bg.ac.rs/~konferencija/Program2019.pdf), kao i u [knjizi apstrakata](https://alas.matf.bg.ac.rs/~konferencija/KNJIGA_APSTRAKATA_2019.pdf).
+
 ## Tehnički detalji :robot:
 Program je napisan u jeziku Python3 (malo starija verzija 3.2.3), na operativnom sistemu Ubuntu, uz korišćenje osobina raznih paradigmi odnosno obrazaca programiranja koji su u osnovi ovog jezika ili čiji se koncepti provlače kroz njega:
 * imperativna/proceduralna paradigma: promenljive, funkcije, nizanje naredbi, opis procedure...,
